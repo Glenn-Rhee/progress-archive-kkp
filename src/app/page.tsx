@@ -52,6 +52,7 @@ export default async function HomePage() {
       </div>
     );
   } catch (error) {
+    console.log("Error while get data", error);
     if (error instanceof ResponseError) {
       return (
         <div>
