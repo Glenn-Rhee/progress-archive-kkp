@@ -6,14 +6,37 @@ import FormDataLink from "./FormDataLink";
 import z from "zod";
 import DataLinkValidation from "@/validation/dataLink-validation";
 import { usePopover } from "@/store/popover-store";
+import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
 
 export default function Card() {
   const { setOpenId } = usePopover();
+  const [isCopy, setIsCopy] = useState(false);
   async function handleSubmit(
     values: z.infer<typeof DataLinkValidation.DATALINK>
   ) {
     console.log("Edit: ", values);
   }
+
+  function copyTextToClipboard(text: string) {
+    navigator.clipboard.writeText(text).then(() => {
+      toast.success("URL berhasil disalin ke clipboard!");
+      setIsCopy(true);
+    });
+  }
+
+  useEffect(() => {
+    if (isCopy) {
+      const timeout = setTimeout(() => {
+        setIsCopy(false);
+      }, 1900);
+
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
+  }, [isCopy]);
+
   return (
     <div className="group bg-slate-800/40 backdrop-blur-sm border border-slate-700/30 rounded-2xl p-6 hover:border-primary-500/30 hover:bg-slate-800/60 transition-all duration-300 animate-fade-in">
       <div className="flex items-start justify-between mb-4">
@@ -71,8 +94,20 @@ export default function Card() {
               https://instagram.com/aaarrl.r
             </Link>
           </div>
-          <button className="cursor-pointer w-8 h-8 bg-slate-700/50 hover:bg-slate-600/50 rounded-lg flex items-center justify-center text-slate-400 hover:text-white transition-all duration-200">
-            <i className="ri-file-copy-line"></i>
+          <button
+            type="button"
+            onClick={() => {
+              if (!isCopy) {
+                copyTextToClipboard("https://instagram.com/aaarrl.r");
+              }
+            }}
+            className="cursor-pointer w-8 h-8 bg-slate-700/50 hover:bg-slate-600/50 rounded-lg flex items-center justify-center text-slate-400 hover:text-white transition-all duration-200"
+          >
+            {isCopy ? (
+              <i className="ri-check-line"></i>
+            ) : (
+              <i className="ri-file-copy-line"></i>
+            )}
           </button>
         </div>
       </div>
