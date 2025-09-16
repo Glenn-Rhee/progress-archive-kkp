@@ -78,9 +78,11 @@ export default function HomePage() {
         </div>
       ) : (
         <CardShell>
-          {data!.map((d) => (
-            <Card key={d.id} data={d} />
-          ))}
+          {data!
+            .sort((a, b) => a.title.localeCompare(b.title))
+            .map((d) => (
+              <Card key={d.id} data={d} />
+            ))}
         </CardShell>
       )}
     </div>

@@ -8,8 +8,10 @@ import DataLinkValidation from "@/validation/dataLink-validation";
 import { usePopover } from "@/store/popover-store";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
-import { DataLink } from "@/types";
+import { DataLink, ResponsePayload } from "@/types";
 import { getFormattDate } from "@/helper/getFormattDate";
+import ResponseError from "@/error/ResponseError";
+import { useRouter } from "next/navigation";
 
 interface CardProps {
   data: DataLink;
@@ -20,13 +22,39 @@ export default function Card(props: CardProps) {
   const { setOpenId } = usePopover();
   const [loading, setLoading] = useState(false);
   const [isCopy, setIsCopy] = useState(false);
+  const router = useRouter();
 
   async function handleSubmit(
     values: z.infer<typeof DataLinkValidation.DATALINK>
   ) {
     setLoading(true);
-    console.log("Edit: ", values);
-    setLoading(false);
+    try {
+      const response = await fetch("/api/link?id=" + data.id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      const dataResponse = (await response.json()) as ResponsePayload;
+      if (dataResponse.status === "failed") {
+        throw new ResponseError(dataResponse.statusCode, dataResponse.message);
+      }
+
+      toast.success(dataResponse.message);
+      setOpenId(null);
+      router.refresh();
+    } catch (error) {
+      if (error instanceof ResponseError) {
+        toast.error(error.message);
+        return;
+      }
+
+      toast.error("An error occured!");
+    } finally {
+      setLoading(false);
+    }
   }
 
   function copyTextToClipboard(text: string) {
@@ -67,8 +95,9 @@ export default function Card(props: CardProps) {
               </div>
             }
           >
-            <HeaderFormData />
+            <HeaderFormData title="Edit Link" />
             <FormDataLink
+              data={data}
               loading={loading}
               isForEdit
               handleSubmit={handleSubmit}

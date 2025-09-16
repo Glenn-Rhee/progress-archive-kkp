@@ -5,6 +5,7 @@ import DataLinkValidation from "@/validation/dataLink-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePopover } from "@/store/popover-store";
 import { BeatLoader } from "react-spinners";
+import { DataLink } from "@/types";
 
 interface FormDataLinkProps {
   handleSubmit: (
@@ -12,19 +13,20 @@ interface FormDataLinkProps {
   ) => Promise<void>;
   isForEdit?: boolean;
   loading: boolean;
+  data?: DataLink;
 }
 
 export default function FormDataLink(props: FormDataLinkProps) {
-  const { handleSubmit, isForEdit, loading } = props;
+  const { handleSubmit, isForEdit, loading, data } = props;
   const { setOpenId } = usePopover();
 
   const form = useForm<z.infer<typeof DataLinkValidation.DATALINK>>({
     resolver: zodResolver(DataLinkValidation.DATALINK),
     mode: "onChange",
     defaultValues: {
-      description: "",
-      title: "",
-      url: "",
+      description: data?.description,
+      title: data?.title,
+      url: data?.url,
     },
   });
 
@@ -33,7 +35,6 @@ export default function FormDataLink(props: FormDataLinkProps) {
       onSubmit={(e) => {
         e.preventDefault();
         form.handleSubmit(handleSubmit)();
-        form.reset();
       }}
       className="space-y-4 md:space-y-6 mt-4 pb-4"
     >
@@ -106,7 +107,6 @@ export default function FormDataLink(props: FormDataLinkProps) {
           onClick={(e) => {
             e.stopPropagation();
             form.handleSubmit(handleSubmit)();
-            form.reset();
           }}
           disabled={loading}
           className="flex-1 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 px-6 py-3 rounded-xl font-medium cursor-pointer text-white transition-all duration-300 transform hover:scale-105"

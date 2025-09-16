@@ -10,7 +10,7 @@ interface PopoverProps {
 
 export default function Popover(props: PopoverProps) {
   const { triggerElement, children } = props;
-  const { openId, setOpenId } = usePopover();
+  const { openId, setOpenId, setData } = usePopover();
   const id = useId();
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
@@ -83,7 +83,9 @@ export default function Popover(props: PopoverProps) {
     <div className="relative w-full">
       <button
         type="button"
-        onClick={() => setOpenId(id)}
+        onClick={() => {
+          setOpenId(id);
+        }}
         ref={triggerRef}
         className="cursor-pointer w-full"
       >

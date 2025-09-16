@@ -1,7 +1,7 @@
 "use client";
 import { usePopover } from "@/store/popover-store";
 
-export default function HeaderFormData() {
+export default function HeaderFormData({ title }: { title: string }) {
   const { setOpenId } = usePopover();
 
   return (
@@ -9,7 +9,7 @@ export default function HeaderFormData() {
       onClick={(e) => e.stopPropagation()}
       className="flex items-center justify-between border-b py-3 border-slate-700/50"
     >
-      <h3 className="text-xl font-bold text-white">Tambah Link baru</h3>
+      <h3 className="text-xl font-bold text-white">{title}</h3>
       <button
         type="button"
         onClick={() => setOpenId(null)}

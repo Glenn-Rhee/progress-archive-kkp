@@ -74,7 +74,7 @@ export default function SearchBar() {
             </div>
           }
         >
-          <HeaderFormData />
+          <HeaderFormData title="Tambah data link" />
           <FormDataLink handleSubmit={handleSubmit} loading={loading} />
         </Popover>
       </div>

@@ -10,8 +10,6 @@ export default class LinkService {
       },
     ]);
 
-    console.log("created new link!");
-
     if (createdDataLink.error) {
       console.log(createdDataLink.error);
       throw new ResponseError(501, "An error while create data Link");
@@ -26,6 +24,7 @@ export default class LinkService {
 
   static async getDataLink(query: URLSearchParams): Promise<ResponsePayload> {
     const q = query.get("q");
+
     if (!q) {
       const { data, error } = await supabase.from("link").select("*");
       if (!data && error) {
@@ -54,6 +53,43 @@ export default class LinkService {
       message: "Successfully get data links!",
       statusCode: 200,
       data,
+    };
+  }
+
+  static async updateDataLink(
+    id: string,
+    dataUser: Link
+  ): Promise<ResponsePayload> {
+    const { data, error } = await supabase
+      .from("link")
+      .select("*")
+      .eq("id", id);
+
+    if (error) {
+      console.log("Error update 1:", error.message);
+      throw new ResponseError(501, "An error while update data Link");
+    }
+
+    if (!data) {
+      throw new ResponseError(404, "Id link is not found!");
+    }
+
+    const { error: errorUpdate } = await supabase
+      .from("link")
+      .update({
+        ...dataUser,
+      })
+      .eq("id", id);
+
+    if (errorUpdate) {
+      console.log("Error update 2:", errorUpdate.message);
+      throw new ResponseError(501, "An error while update data Link");
+    }
+
+    return {
+      status: "success",
+      statusCode: 201,
+      message: "Successfully update data!",
     };
   }
 }
