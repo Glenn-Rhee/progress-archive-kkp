@@ -10,3 +10,8 @@ export interface Link {
   url: string;
   description?: string;
 }
+
+export interface DataLink extends Link {
+  id: string;
+  created_at: string;
+}

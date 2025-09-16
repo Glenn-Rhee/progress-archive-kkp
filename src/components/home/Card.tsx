@@ -8,10 +8,18 @@ import DataLinkValidation from "@/validation/dataLink-validation";
 import { usePopover } from "@/store/popover-store";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
+import { DataLink } from "@/types";
 
-export default function Card() {
+interface CardProps {
+  data: DataLink;
+}
+
+export default function Card(props: CardProps) {
+  const { data } = props;
   const { setOpenId } = usePopover();
+  const [loading, setLoading] = useState(false);
   const [isCopy, setIsCopy] = useState(false);
+
   async function handleSubmit(
     values: z.infer<typeof DataLinkValidation.DATALINK>
   ) {
@@ -42,10 +50,10 @@ export default function Card() {
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1 min-w-0">
           <h3 className="text-xl font-bold text-white mb-2 group-hover:text-primary-400 transition-colors line-clamp-2">
-            cihuy
+            {data.title}
           </h3>
           <p className="text-slate-400 text-sm leading-relaxed mb-4 line-clamp-3">
-            cihuy desc
+            {data.description}
           </p>
         </div>
         <div className="flex gap-2 ml-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -57,7 +65,11 @@ export default function Card() {
             }
           >
             <HeaderFormData />
-            <FormDataLink isForEdit handleSubmit={handleSubmit} />
+            <FormDataLink
+              loading={loading}
+              isForEdit
+              handleSubmit={handleSubmit}
+            />
           </Popover>
           <Popover
             triggerElement={
