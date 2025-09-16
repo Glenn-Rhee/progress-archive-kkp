@@ -4,16 +4,18 @@ import z from "zod";
 import DataLinkValidation from "@/validation/dataLink-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePopover } from "@/store/popover-store";
+import { BeatLoader } from "react-spinners";
 
 interface FormDataLinkProps {
   handleSubmit: (
     values: z.infer<typeof DataLinkValidation.DATALINK>
   ) => Promise<void>;
   isForEdit?: boolean;
+  loading: boolean;
 }
 
 export default function FormDataLink(props: FormDataLinkProps) {
-  const { handleSubmit, isForEdit } = props;
+  const { handleSubmit, isForEdit, loading } = props;
   const { setOpenId } = usePopover();
 
   const form = useForm<z.infer<typeof DataLinkValidation.DATALINK>>({
@@ -31,6 +33,7 @@ export default function FormDataLink(props: FormDataLinkProps) {
       onSubmit={(e) => {
         e.preventDefault();
         form.handleSubmit(handleSubmit)();
+        form.reset();
       }}
       className="space-y-4 md:space-y-6 mt-4 pb-4"
     >
@@ -100,14 +103,28 @@ export default function FormDataLink(props: FormDataLinkProps) {
       <div className="flex gap-3 pt-4">
         <button
           type="submit"
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            form.handleSubmit(handleSubmit)();
+            form.reset();
+          }}
+          disabled={loading}
           className="flex-1 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 px-6 py-3 rounded-xl font-medium cursor-pointer text-white transition-all duration-300 transform hover:scale-105"
         >
-          <i className="ri-save-line text-xl"></i> Simpan
+          {loading ? (
+            <BeatLoader />
+          ) : (
+            <>
+              <i className="ri-save-line text-xl"></i> <span>simpan</span>
+            </>
+          )}
         </button>
         <button
           type="button"
-          onClick={() => setOpenId(null)}
+          onClick={() => {
+            setOpenId(null);
+            form.reset();
+          }}
           className="px-6 py-3 cursor-pointer bg-slate-700/50 hover:bg-slate-600/50 border border-slate-600/30 rounded-xl font-medium text-slate-300 hover:text-white transition-all duration-300"
         >
           Batal

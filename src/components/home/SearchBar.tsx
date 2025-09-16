@@ -4,18 +4,47 @@ import FormDataLink from "./FormDataLink";
 import HeaderFormData from "./HeaderFormData";
 import DataLinkValidation from "@/validation/dataLink-validation";
 import z from "zod";
+import ResponseError from "@/error/ResponseError";
+import toast from "react-hot-toast";
+import { ResponsePayload } from "@/types";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const Popover = dynamic(() => import("../Popover"), {
   ssr: false,
 });
 
 export default function SearchBar() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   async function handleSubmit(
     values: z.infer<typeof DataLinkValidation.DATALINK>
   ) {
-    console.log("submit: ", values);
+    setLoading(true);
+    try {
+      const response = await fetch("/api/link", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      const dataResponse = (await response.json()) as ResponsePayload;
+      if (dataResponse.status === "failed") {
+        throw new ResponseError(dataResponse.statusCode, dataResponse.message);
+      }
+      toast.success(dataResponse.message);
+      router.refresh();
+    } catch (error) {
+      if (error instanceof ResponseError) {
+        toast.error(error.message);
+      }
+    } finally {
+      setLoading(false);
+    }
   }
-  
+
   return (
     <div className="flex flex-col lg:flex-row gap-6 items-center justify-center mb-8 animate-slide-up">
       <div className="relative flex-1 w-full lg:max-w-2xl">
@@ -46,7 +75,7 @@ export default function SearchBar() {
           }
         >
           <HeaderFormData />
-          <FormDataLink handleSubmit={handleSubmit} />
+          <FormDataLink handleSubmit={handleSubmit} loading={loading} />
         </Popover>
       </div>
     </div>
