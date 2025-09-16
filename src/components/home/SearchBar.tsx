@@ -1,6 +1,6 @@
 export default function SearchBar() {
   return (
-    <div className="flex flex-col lg:flex-row gap-6 items-center mb-8 animate-slide-up">
+    <div className="flex flex-col lg:flex-row gap-6 items-center justify-center mb-8 animate-slide-up">
       <div className="relative flex-1 w-full lg:max-w-2xl">
         <div className="w-full bg-slate-800/50 backdrop-blur-sm px-6 py-4 gap-x-4 border border-slate-600/30 rounded-2xl items-center flex">
           <button>
