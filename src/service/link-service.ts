@@ -41,7 +41,8 @@ export default class LinkService {
     const { data, error } = await supabase
       .from("link")
       .select("*")
-      .eq("title", q);
+      .ilike("title", `%${q}%`);
+
     if (!data && error) {
       throw new ResponseError(501, "An error while get data Link");
     }
