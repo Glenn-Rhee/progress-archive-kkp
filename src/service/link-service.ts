@@ -31,7 +31,6 @@ export default class LinkService {
       if (!data && error) {
         throw new ResponseError(501, "An error while get data Link");
       }
-      console.log("get data link:", data);
 
       return {
         status: "success",
