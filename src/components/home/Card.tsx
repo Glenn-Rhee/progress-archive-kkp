@@ -9,6 +9,7 @@ import { usePopover } from "@/store/popover-store";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { DataLink } from "@/types";
+import { getFormattDate } from "@/helper/getFormattDate";
 
 interface CardProps {
   data: DataLink;
@@ -23,7 +24,9 @@ export default function Card(props: CardProps) {
   async function handleSubmit(
     values: z.infer<typeof DataLinkValidation.DATALINK>
   ) {
+    setLoading(true);
     console.log("Edit: ", values);
+    setLoading(false);
   }
 
   function copyTextToClipboard(text: string) {
@@ -100,17 +103,17 @@ export default function Card(props: CardProps) {
           <div className="flex-1 min-w-0">
             <Link
               target="_blank"
-              href={"https://instagram.com/aaarrl.r"}
+              href={data.url}
               className="text-primary-400 hover:text-primary-300 font-medium text-sm break-all transition-colors duration-200"
             >
-              https://instagram.com/aaarrl.r
+              {data.url}
             </Link>
           </div>
           <button
             type="button"
             onClick={() => {
               if (!isCopy) {
-                copyTextToClipboard("https://instagram.com/aaarrl.r");
+                copyTextToClipboard(data.url);
               }
             }}
             className="cursor-pointer w-8 h-8 bg-slate-700/50 hover:bg-slate-600/50 rounded-lg flex items-center justify-center text-slate-400 hover:text-white transition-all duration-200"
@@ -127,7 +130,7 @@ export default function Card(props: CardProps) {
         <div className="flex items-center">
           <span className="flex items-center gap-1">
             <i className="ri-calendar-line"></i>
-            19/09/2005
+            {getFormattDate(data.created_at)}
           </span>
         </div>
       </div>
