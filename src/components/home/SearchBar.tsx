@@ -1,10 +1,14 @@
 "use client";
 import { useForm } from "react-hook-form";
-import Popover from "../Popover";
 import z from "zod";
 import DataLinkValidation from "@/validation/dataLink-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePopover } from "@/store/popover-store";
+import dynamic from "next/dynamic";
+
+const Popover = dynamic(() => import("../Popover"), {
+  ssr: false,
+});
 
 export default function SearchBar() {
   const form = useForm<z.infer<typeof DataLinkValidation.DATALINK>>({
@@ -16,7 +20,7 @@ export default function SearchBar() {
       url: "",
     },
   });
-  const { setIsOpen } = usePopover();
+  const { setOpenId } = usePopover();
 
   async function handleSubmit(
     values: z.infer<typeof DataLinkValidation.DATALINK>
@@ -57,7 +61,7 @@ export default function SearchBar() {
             <h3 className="text-xl font-bold text-white">Tambah Link baru</h3>
             <button
               type="button"
-              onClick={() => setIsOpen(false)}
+              onClick={() => setOpenId(null)}
               className="w-10 h-10 cursor-pointer text-xl bg-slate-700/50 hover:bg-slate-600/50 rounded-xl flex items-center justify-center text-slate-400 hover:text-white transition-all duration-200"
             >
               <i className="ri-close-line"></i>
@@ -142,7 +146,7 @@ export default function SearchBar() {
               </button>
               <button
                 type="button"
-                onClick={() => setIsOpen(false)}
+                onClick={() => setOpenId(null)}
                 className="px-6 py-3 cursor-pointer bg-slate-700/50 hover:bg-slate-600/50 border border-slate-600/30 rounded-xl font-medium text-slate-300 hover:text-white transition-all duration-300"
               >
                 Batal

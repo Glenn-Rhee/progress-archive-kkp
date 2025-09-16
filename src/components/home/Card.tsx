@@ -1,4 +1,6 @@
+"use client";
 import Link from "next/link";
+import Popover from "../Popover";
 
 export default function Card() {
   return (
@@ -13,12 +15,26 @@ export default function Card() {
           </p>
         </div>
         <div className="flex gap-2 ml-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <button className="w-10 cursor-pointer h-10 bg-primary-500/20 hover:bg-primary-500/30 rounded-xl flex items-center justify-center text-primary-400 hover:text-primary-300 transition-all duration-200">
-            <i className="ri-pencil-line"></i>
-          </button>
-          <button className="w-10 cursor-pointer h-10 hover:bg-red-500/30 rounded-xl flex items-center justify-center text-primary-400 hover:text-primary-300 transition-all duration-200 bg-red-500/20">
-            <i className="ri-delete-bin-line"></i>
-          </button>
+          <Popover
+            triggerElement={
+              <div className="w-10 cursor-pointer h-10 bg-primary-500/20 hover:bg-primary-500/30 rounded-xl flex items-center justify-center text-primary-400 hover:text-primary-300 transition-all duration-200">
+                <i className="ri-pencil-line"></i>
+              </div>
+            }
+          >
+            <div className="flex items-center justify-between border-b py-3 border-slate-700/50">
+              cihuy
+            </div>
+          </Popover>
+          <Popover
+            triggerElement={
+              <div className="w-10 cursor-pointer h-10 hover:bg-red-500/30 rounded-xl flex items-center justify-center text-primary-400 hover:text-primary-300 transition-all duration-200 bg-red-500/20">
+                <i className="ri-delete-bin-line"></i>
+              </div>
+            }
+          >
+            cihuy
+          </Popover>
         </div>
       </div>
       <div className="bg-slate-900/50 border border-slate-600/20 rounded-xl p-4 mb-4">

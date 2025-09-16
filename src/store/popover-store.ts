@@ -1,11 +1,11 @@
 import { create } from "zustand";
 
 interface PopoverStore {
-  isOpen: boolean;
-  setIsOpen: (v: boolean) => void;
+  openId: string | null;
+  setOpenId: (v: string | null) => void;
 }
 
 export const usePopover = create<PopoverStore>((set) => ({
-  isOpen: false,
-  setIsOpen: (v) => set({ isOpen: v }),
+  openId: null as string | null,
+  setOpenId: (v) => set({ openId: v }),
 }));
