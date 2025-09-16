@@ -72,10 +72,7 @@ export default function LoginPage() {
           console.log("Redirect ke dashboard");
         }, 2000);
       } else {
-        showAlert(
-          "error",
-          "Username atau password salah. Coba gunakan: admin / admin123"
-        );
+        showAlert("error", "Username atau password salah.");
       }
     } catch (error) {
       showAlert("error", "Terjadi kesalahan. Silakan coba lagi.");
