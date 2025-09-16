@@ -21,4 +21,36 @@ export default class LinkService {
       statusCode: 201,
     };
   }
+
+  static async getDataLink(query: URLSearchParams): Promise<ResponsePayload> {
+    const q = query.get("q");
+    if (!q) {
+      const { data, error } = await supabase.from("link").select("*");
+      if (!data && error) {
+        throw new ResponseError(501, "An error while get data Link");
+      }
+
+      return {
+        status: "success",
+        message: "Successfully get data links!",
+        statusCode: 200,
+        data,
+      };
+    }
+
+    const { data, error } = await supabase
+      .from("link")
+      .select("*")
+      .eq("title", q);
+    if (!data && error) {
+      throw new ResponseError(501, "An error while get data Link");
+    }
+
+    return {
+      status: "success",
+      message: "Successfully get data links!",
+      statusCode: 200,
+      data,
+    };
+  }
 }

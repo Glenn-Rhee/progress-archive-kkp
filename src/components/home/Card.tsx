@@ -8,14 +8,25 @@ import DataLinkValidation from "@/validation/dataLink-validation";
 import { usePopover } from "@/store/popover-store";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
+import { DataLink } from "@/types";
+import { getFormattDate } from "@/helper/getFormattDate";
 
-export default function Card() {
+interface CardProps {
+  data: DataLink;
+}
+
+export default function Card(props: CardProps) {
+  const { data } = props;
   const { setOpenId } = usePopover();
+  const [loading, setLoading] = useState(false);
   const [isCopy, setIsCopy] = useState(false);
+
   async function handleSubmit(
     values: z.infer<typeof DataLinkValidation.DATALINK>
   ) {
+    setLoading(true);
     console.log("Edit: ", values);
+    setLoading(false);
   }
 
   function copyTextToClipboard(text: string) {
@@ -42,10 +53,10 @@ export default function Card() {
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1 min-w-0">
           <h3 className="text-xl font-bold text-white mb-2 group-hover:text-primary-400 transition-colors line-clamp-2">
-            cihuy
+            {data.title}
           </h3>
           <p className="text-slate-400 text-sm leading-relaxed mb-4 line-clamp-3">
-            cihuy desc
+            {data.description}
           </p>
         </div>
         <div className="flex gap-2 ml-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -57,7 +68,11 @@ export default function Card() {
             }
           >
             <HeaderFormData />
-            <FormDataLink isForEdit handleSubmit={handleSubmit} />
+            <FormDataLink
+              loading={loading}
+              isForEdit
+              handleSubmit={handleSubmit}
+            />
           </Popover>
           <Popover
             triggerElement={
@@ -88,17 +103,17 @@ export default function Card() {
           <div className="flex-1 min-w-0">
             <Link
               target="_blank"
-              href={"https://instagram.com/aaarrl.r"}
+              href={data.url}
               className="text-primary-400 hover:text-primary-300 font-medium text-sm break-all transition-colors duration-200"
             >
-              https://instagram.com/aaarrl.r
+              {data.url}
             </Link>
           </div>
           <button
             type="button"
             onClick={() => {
               if (!isCopy) {
-                copyTextToClipboard("https://instagram.com/aaarrl.r");
+                copyTextToClipboard(data.url);
               }
             }}
             className="cursor-pointer w-8 h-8 bg-slate-700/50 hover:bg-slate-600/50 rounded-lg flex items-center justify-center text-slate-400 hover:text-white transition-all duration-200"
@@ -115,7 +130,7 @@ export default function Card() {
         <div className="flex items-center">
           <span className="flex items-center gap-1">
             <i className="ri-calendar-line"></i>
-            19/09/2005
+            {getFormattDate(data.created_at)}
           </span>
         </div>
       </div>

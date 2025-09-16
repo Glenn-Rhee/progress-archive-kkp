@@ -13,7 +13,37 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     Validation.validate(DataLinkValidation.DATALINK, dataBody);
 
     const response = await LinkService.createDataLink(dataBody);
-    return NextResponse.json(response);
+    return NextResponse.json<ResponsePayload>(response);
+  } catch (error) {
+    console.log("Error Link Route:", error);
+    if (error instanceof ResponseError) {
+      return NextResponse.json<ResponsePayload>({
+        status: "failed",
+        message: error.message,
+        statusCode: error.status,
+      });
+    } else if (error instanceof ZodError) {
+      return NextResponse.json<ResponsePayload>({
+        status: "failed",
+        message: error.issues[0].message,
+        statusCode: 402,
+      });
+    } else {
+      return NextResponse.json<ResponsePayload>({
+        status: "failed",
+        message: "An error occured",
+        statusCode: 500,
+      });
+    }
+  }
+}
+
+export async function GET(req: NextRequest): Promise<NextResponse> {
+  try {
+    const query = req.nextUrl.searchParams;
+    const response = await LinkService.getDataLink(query);
+
+    return NextResponse.json<ResponsePayload>(response);
   } catch (error) {
     console.log("Error Link Route:", error);
     if (error instanceof ResponseError) {
