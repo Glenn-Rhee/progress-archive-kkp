@@ -19,17 +19,16 @@ export default function Popover(props: PopoverProps) {
   useEffect(() => {
     setMounted(true);
   }, []);
-
   const handleClickOutside = useCallback(
     (event: MouseEvent) => {
-      if (
-        popoverRef.current &&
-        !popoverRef.current.contains(event.target as Node) &&
-        triggerRef.current &&
-        !triggerRef.current.contains(event.target as Node)
-      ) {
-        setOpenId(null);
-      }
+      const popoverEl = popoverRef.current;
+      const triggerEl = triggerRef.current;
+      const target = event.target as Node;
+
+      if (popoverEl && popoverEl.contains(target)) return;
+      if (triggerEl && triggerEl.contains(target)) return;
+
+      setOpenId(null);
     },
     [setOpenId]
   );
@@ -43,51 +42,37 @@ export default function Popover(props: PopoverProps) {
   }, [openId]);
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
+    if (openId === id) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [handleClickOutside]);
+  }, [openId, id, handleClickOutside]);
 
   const content = (
     <motion.div
-      initial={{
-        display: "none",
-      }}
+      initial={{ display: "none" }}
       variants={{
-        show: {
-          display: "flex",
-        },
-        hide: {
-          display: "none",
-        },
+        show: { display: "flex" },
+        hide: { display: "none" },
       }}
       animate={openId === id ? "show" : "hide"}
-      className="fixed z-30 backdrop-blur-sm top-0 left-0 right-0 bottom-0 min-h-screen min-w-screen flex items-center justify-center bg-black/60"
+      className="fixed inset-0 z-30 flex items-center justify-center bg-black/60 backdrop-blur-sm"
     >
       <motion.div
-        initial={{
-          scale: 0,
-          opacity: 0,
-        }}
+        ref={popoverRef}
+        initial={{ scale: 0.8, opacity: 0 }}
         variants={{
-          show: {
-            scale: 1,
-            opacity: 1,
-          },
-          hide: {
-            scale: 0,
-            opacity: 0,
-          },
+          show: { scale: 1, opacity: 1 },
+          hide: { scale: 0.8, opacity: 0 },
         }}
         animate={openId === id ? "show" : "hide"}
-        transition={{
-          duration: 0.4,
-          ease: "easeOut",
-          delay: 0,
-        }}
-        className="cursor-auto mt-1 border border-slate-700/50 w-full rounded-3xl bg-slate-800/90 px-6 py-2 max-w-xl"
-        ref={popoverRef}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="cursor-auto border border-slate-700/50 w-full max-w-xl rounded-3xl bg-slate-800/90 px-6 py-4"
       >
         {children}
       </motion.div>
