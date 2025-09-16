@@ -5,7 +5,14 @@ import DataLinkValidation from "@/validation/dataLink-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePopover } from "@/store/popover-store";
 
-export default function FormDataLink() {
+interface FormDataLinkProps {
+  handleSubmit: (
+    values: z.infer<typeof DataLinkValidation.DATALINK>
+  ) => Promise<void>;
+}
+
+export default function FormDataLink(props: FormDataLinkProps) {
+  const { handleSubmit } = props;
   const { setOpenId } = usePopover();
 
   const form = useForm<z.infer<typeof DataLinkValidation.DATALINK>>({
@@ -17,11 +24,7 @@ export default function FormDataLink() {
       url: "",
     },
   });
-  async function handleSubmit(
-    values: z.infer<typeof DataLinkValidation.DATALINK>
-  ) {
-    console.log(values);
-  }
+
   return (
     <form
       onSubmit={(e) => {
@@ -80,15 +83,15 @@ export default function FormDataLink() {
           URL
         </label>
         <input
-          {...form.register("url")}
+          {...form.register("description")}
           type="text"
           id="description"
           className="w-full bg-slate-700/50 border border-slate-600/30 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-primary-500/50 focus:bg-slate-700/70 transition-all duration-300"
           placeholder="Deskripsi opsional"
         />
-        {form.formState.errors.url && (
+        {form.formState.errors.description && (
           <p className="text-red-700 text-sm font-semibold mt-1 ml-1">
-            {form.formState.errors.url.message}
+            {form.formState.errors.description.message}
           </p>
         )}
       </div>

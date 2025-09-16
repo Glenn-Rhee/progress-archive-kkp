@@ -1,8 +1,17 @@
 "use client";
 import Link from "next/link";
 import Popover from "../Popover";
+import HeaderFormData from "./HeaderFormData";
+import FormDataLink from "./FormDataLink";
+import z from "zod";
+import DataLinkValidation from "@/validation/dataLink-validation";
 
 export default function Card() {
+  async function handleSubmit(
+    values: z.infer<typeof DataLinkValidation.DATALINK>
+  ) {
+    console.log("Edit: ", values);
+  }
   return (
     <div className="group bg-slate-800/40 backdrop-blur-sm border border-slate-700/30 rounded-2xl p-6 hover:border-primary-500/30 hover:bg-slate-800/60 transition-all duration-300 animate-fade-in">
       <div className="flex items-start justify-between mb-4">
@@ -22,9 +31,8 @@ export default function Card() {
               </div>
             }
           >
-            <div className="flex items-center justify-between border-b py-3 border-slate-700/50">
-              cihuy
-            </div>
+            <HeaderFormData />
+            <FormDataLink handleSubmit={handleSubmit} />
           </Popover>
           <Popover
             triggerElement={

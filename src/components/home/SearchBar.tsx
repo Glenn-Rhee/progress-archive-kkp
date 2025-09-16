@@ -1,15 +1,21 @@
 "use client";
-import { usePopover } from "@/store/popover-store";
 import dynamic from "next/dynamic";
 import FormDataLink from "./FormDataLink";
+import HeaderFormData from "./HeaderFormData";
+import DataLinkValidation from "@/validation/dataLink-validation";
+import z from "zod";
 
 const Popover = dynamic(() => import("../Popover"), {
   ssr: false,
 });
 
 export default function SearchBar() {
-  const { setOpenId } = usePopover();
-
+  async function handleSubmit(
+    values: z.infer<typeof DataLinkValidation.DATALINK>
+  ) {
+    console.log("submit: ", values);
+  }
+  
   return (
     <div className="flex flex-col lg:flex-row gap-6 items-center justify-center mb-8 animate-slide-up">
       <div className="relative flex-1 w-full lg:max-w-2xl">
@@ -39,20 +45,8 @@ export default function SearchBar() {
             </div>
           }
         >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="flex items-center justify-between border-b py-3 border-slate-700/50"
-          >
-            <h3 className="text-xl font-bold text-white">Tambah Link baru</h3>
-            <button
-              type="button"
-              onClick={() => setOpenId(null)}
-              className="w-10 h-10 cursor-pointer text-xl bg-slate-700/50 hover:bg-slate-600/50 rounded-xl flex items-center justify-center text-slate-400 hover:text-white transition-all duration-200"
-            >
-              <i className="ri-close-line"></i>
-            </button>
-          </div>
-          <FormDataLink />
+          <HeaderFormData />
+          <FormDataLink handleSubmit={handleSubmit} />
         </Popover>
       </div>
     </div>
