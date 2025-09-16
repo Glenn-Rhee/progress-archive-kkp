@@ -5,8 +5,10 @@ import HeaderFormData from "./HeaderFormData";
 import FormDataLink from "./FormDataLink";
 import z from "zod";
 import DataLinkValidation from "@/validation/dataLink-validation";
+import { usePopover } from "@/store/popover-store";
 
 export default function Card() {
+  const { setOpenId } = usePopover();
   async function handleSubmit(
     values: z.infer<typeof DataLinkValidation.DATALINK>
   ) {
@@ -32,7 +34,7 @@ export default function Card() {
             }
           >
             <HeaderFormData />
-            <FormDataLink handleSubmit={handleSubmit} />
+            <FormDataLink isForEdit handleSubmit={handleSubmit} />
           </Popover>
           <Popover
             triggerElement={
@@ -41,7 +43,20 @@ export default function Card() {
               </div>
             }
           >
-            cihuy
+            <h3 className="w-full text-center text-xl font-semibold">
+              Apakah anda yakin ingin menghapus link Cihuy?
+            </h3>
+            <div className="flex gap-x-3 items-center w-full mt-6 justify-center">
+              <button className="bg-red-500/70 cursor-pointer px-3 py-2 rounded-lg">
+                Ya
+              </button>
+              <button
+                onClick={() => setOpenId(null)}
+                className="cursor-pointer px-3 py-2 rounded-lg bg-gradient-to-r from-primary-500 to-primary-700"
+              >
+                Tidak
+              </button>
+            </div>
           </Popover>
         </div>
       </div>

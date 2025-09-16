@@ -9,10 +9,11 @@ interface FormDataLinkProps {
   handleSubmit: (
     values: z.infer<typeof DataLinkValidation.DATALINK>
   ) => Promise<void>;
+  isForEdit?: boolean;
 }
 
 export default function FormDataLink(props: FormDataLinkProps) {
-  const { handleSubmit } = props;
+  const { handleSubmit, isForEdit } = props;
   const { setOpenId } = usePopover();
 
   const form = useForm<z.infer<typeof DataLinkValidation.DATALINK>>({
@@ -35,7 +36,7 @@ export default function FormDataLink(props: FormDataLinkProps) {
     >
       <div className="space-y-2">
         <label
-          htmlFor="title"
+          htmlFor={isForEdit ? "editTitle" : "title"}
           className="block text-sm font-semibold text-slate-300"
         >
           Judul Link
@@ -43,7 +44,7 @@ export default function FormDataLink(props: FormDataLinkProps) {
         <input
           {...form.register("title")}
           type="text"
-          id="title"
+          id={isForEdit ? "editTitle" : "title"}
           className="w-full bg-slate-700/50 border border-slate-600/30 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-primary-500/50 focus:bg-slate-700/70 transition-all duration-300"
           placeholder="Masukkan judul link"
         />
@@ -56,7 +57,7 @@ export default function FormDataLink(props: FormDataLinkProps) {
 
       <div className="space-y-2">
         <label
-          htmlFor="url"
+          htmlFor={isForEdit ? "editUrl" : "url"}
           className="block text-sm font-semibold text-slate-300"
         >
           URL
@@ -64,7 +65,7 @@ export default function FormDataLink(props: FormDataLinkProps) {
         <input
           {...form.register("url")}
           type="text"
-          id="url"
+          id={isForEdit ? "editUrl" : "url"}
           className="w-full bg-slate-700/50 border border-slate-600/30 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-primary-500/50 focus:bg-slate-700/70 transition-all duration-300"
           placeholder="https://example.com"
         />
@@ -77,15 +78,15 @@ export default function FormDataLink(props: FormDataLinkProps) {
 
       <div className="space-y-2">
         <label
-          htmlFor="description"
+          htmlFor={isForEdit ? "editDescription" : "description"}
           className="block text-sm font-semibold text-slate-300"
         >
-          URL
+          Deskripsi
         </label>
         <input
           {...form.register("description")}
           type="text"
-          id="description"
+          id={isForEdit ? "editDescription" : "description"}
           className="w-full bg-slate-700/50 border border-slate-600/30 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-primary-500/50 focus:bg-slate-700/70 transition-all duration-300"
           placeholder="Deskripsi opsional"
         />

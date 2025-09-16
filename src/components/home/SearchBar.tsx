@@ -34,7 +34,7 @@ export default function SearchBar() {
       <div className="flex gap-3 shrink-0">
         <Popover
           triggerElement={
-            <div className="group relative overflow-hidden cursor-pointer bg-gradient-to-r from-primary-500 to-primary-800 hover:from-primary-500 hover:to-primary-400 px-6 py-3 rounded-2xl font-semibold text-white transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-primary-500/25">
+            <div className="group relative overflow-hidden cursor-pointer bg-gradient-to-r from-primary-500 to-primary-700 hover:from-primary-500 hover:to-primary-400 px-6 py-3 rounded-2xl font-semibold text-white transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-primary-500/25">
               <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
               <div className="relative flex items-center gap-2">
                 <i className="ri-add-line text-2xl"></i>

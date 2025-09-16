@@ -72,7 +72,7 @@ export default function Popover(props: PopoverProps) {
         }}
         animate={openId === id ? "show" : "hide"}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="cursor-auto border border-slate-700/50 w-full max-w-xl rounded-3xl bg-slate-800/90 px-6 py-4"
+        className="cursor-auto border border-slate-700/50 w-full max-w-xl rounded-3xl bg-slate-800/90 px-6 py-5"
       >
         {children}
       </motion.div>
