@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { usePopover } from "@/store/popover-store";
 import { BeatLoader } from "react-spinners";
 import { DataLink } from "@/types";
+import { useEffect } from "react";
 
 interface FormDataLinkProps {
   handleSubmit: (
@@ -18,7 +19,7 @@ interface FormDataLinkProps {
 
 export default function FormDataLink(props: FormDataLinkProps) {
   const { handleSubmit, isForEdit, loading, data } = props;
-  const { setOpenId } = usePopover();
+  const { setOpenId, openId } = usePopover();
 
   const form = useForm<z.infer<typeof DataLinkValidation.DATALINK>>({
     resolver: zodResolver(DataLinkValidation.DATALINK),
@@ -29,6 +30,12 @@ export default function FormDataLink(props: FormDataLinkProps) {
       url: data?.url,
     },
   });
+
+  useEffect(() => {
+    if (!openId) {
+      form.reset();
+    }
+  }, [openId, form]);
 
   return (
     <form

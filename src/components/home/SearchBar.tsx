@@ -9,6 +9,8 @@ import toast from "react-hot-toast";
 import { ResponsePayload } from "@/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { usePopover } from "@/store/popover-store";
+import { useDataLink } from "@/store/dataLink-store";
 
 const Popover = dynamic(() => import("../Popover"), {
   ssr: false,
@@ -16,6 +18,8 @@ const Popover = dynamic(() => import("../Popover"), {
 
 export default function SearchBar() {
   const router = useRouter();
+  const { setOpenId } = usePopover();
+  const { setIsChange } = useDataLink();
   const [loading, setLoading] = useState(false);
   async function handleSubmit(
     values: z.infer<typeof DataLinkValidation.DATALINK>
@@ -35,6 +39,8 @@ export default function SearchBar() {
         throw new ResponseError(dataResponse.statusCode, dataResponse.message);
       }
       toast.success(dataResponse.message);
+      setIsChange(true);
+      setOpenId(null);
       router.refresh();
     } catch (error) {
       if (error instanceof ResponseError) {

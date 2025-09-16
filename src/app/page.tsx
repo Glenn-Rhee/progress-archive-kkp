@@ -11,7 +11,8 @@ import { useEffect } from "react";
 import toast from "react-hot-toast";
 
 export default function HomePage() {
-  const { data, setData, setLoading, loading } = useDataLink();
+  const { data, setData, setLoading, loading, isChange, setIsChange } =
+    useDataLink();
 
   useEffect(() => {
     const getDataLink = async () => {
@@ -42,7 +43,11 @@ export default function HomePage() {
     };
 
     getDataLink();
-  }, [setLoading, setData]);
+    if (isChange) {
+      setIsChange(false);
+      getDataLink();
+    }
+  }, [setLoading, setData, isChange, setIsChange]);
 
   return (
     <div>

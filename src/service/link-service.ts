@@ -70,8 +70,8 @@ export default class LinkService {
       throw new ResponseError(501, "An error while update data Link");
     }
 
-    if (!data) {
-      throw new ResponseError(404, "Id link is not found!");
+    if (data.length === 0) {
+      throw new ResponseError(404, "Data is not found!");
     }
 
     const { error: errorUpdate } = await supabase
@@ -90,6 +90,37 @@ export default class LinkService {
       status: "success",
       statusCode: 201,
       message: "Successfully update data!",
+    };
+  }
+
+  static async deleteDataLink(id: string): Promise<ResponsePayload> {
+    const { data, error } = await supabase
+      .from("link")
+      .select("*")
+      .eq("id", id);
+    if (error) {
+      console.log("Error delete: ", error.message);
+      throw new ResponseError(501, "An error while delete data Link");
+    }
+
+    if (data.length === 0) {
+      throw new ResponseError(404, "Data not found");
+    }
+
+    const { error: errorDelete } = await supabase
+      .from("link")
+      .delete()
+      .eq("id", id);
+
+    if (errorDelete) {
+      console.log("Error delete3: ", errorDelete.message);
+      throw new ResponseError(501, "An error while delete data link");
+    }
+
+    return {
+      status: "success",
+      message: "Successfully delete 1 data!",
+      statusCode: 201,
     };
   }
 }

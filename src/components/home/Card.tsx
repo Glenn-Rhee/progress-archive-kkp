@@ -12,6 +12,8 @@ import { DataLink, ResponsePayload } from "@/types";
 import { getFormattDate } from "@/helper/getFormattDate";
 import ResponseError from "@/error/ResponseError";
 import { useRouter } from "next/navigation";
+import { useDataLink } from "@/store/dataLink-store";
+import clsx from "clsx";
 
 interface CardProps {
   data: DataLink;
@@ -20,11 +22,12 @@ interface CardProps {
 export default function Card(props: CardProps) {
   const { data } = props;
   const { setOpenId } = usePopover();
+  const { setIsChange } = useDataLink();
   const [loading, setLoading] = useState(false);
   const [isCopy, setIsCopy] = useState(false);
   const router = useRouter();
 
-  async function handleSubmit(
+  async function handleEdit(
     values: z.infer<typeof DataLinkValidation.DATALINK>
   ) {
     setLoading(true);
@@ -44,6 +47,7 @@ export default function Card(props: CardProps) {
 
       toast.success(dataResponse.message);
       setOpenId(null);
+      setIsChange(true);
       router.refresh();
     } catch (error) {
       if (error instanceof ResponseError) {
@@ -62,6 +66,34 @@ export default function Card(props: CardProps) {
       toast.success("URL berhasil disalin ke clipboard!");
       setIsCopy(true);
     });
+  }
+
+  async function handleDelete() {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/link?id=" + data.id, {
+        method: "DELETE",
+      });
+      const dataResponse = (await response.json()) as ResponsePayload;
+
+      if (dataResponse.status === "failed") {
+        throw new ResponseError(dataResponse.statusCode, dataResponse.message);
+      }
+
+      toast.success(dataResponse.message);
+      setOpenId(null);
+      setIsChange(true);
+      router.refresh();
+    } catch (error) {
+      if (error instanceof ResponseError) {
+        toast.error(error.message);
+        return;
+      }
+
+      toast.error("An error occured!");
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -100,7 +132,7 @@ export default function Card(props: CardProps) {
               data={data}
               loading={loading}
               isForEdit
-              handleSubmit={handleSubmit}
+              handleSubmit={handleEdit}
             />
           </Popover>
           <Popover
@@ -111,10 +143,20 @@ export default function Card(props: CardProps) {
             }
           >
             <h3 className="w-full text-center text-xl font-semibold">
-              Apakah anda yakin ingin menghapus link Cihuy?
+              Apakah anda yakin ingin menghapus link &quot;{data.title}&quot;?
             </h3>
             <div className="flex gap-x-3 items-center w-full mt-6 justify-center">
-              <button className="bg-red-500/70 cursor-pointer px-3 py-2 rounded-lg">
+              <button
+                type="button"
+                disabled={loading}
+                onClick={handleDelete}
+                className={clsx(
+                  "px-3 py-2 rounded-lg",
+                  loading
+                    ? "bg-red-500/20 cursor-not-allowed"
+                    : "bg-red-500/70 cursor-pointer"
+                )}
+              >
                 Ya
               </button>
               <button

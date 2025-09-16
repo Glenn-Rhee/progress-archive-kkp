@@ -10,7 +10,7 @@ interface PopoverProps {
 
 export default function Popover(props: PopoverProps) {
   const { triggerElement, children } = props;
-  const { openId, setOpenId, setData } = usePopover();
+  const { openId, setOpenId } = usePopover();
   const id = useId();
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
