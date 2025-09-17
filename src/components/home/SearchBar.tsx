@@ -46,7 +46,7 @@ export default function SearchBar() {
 
       toast.error("An error occured");
     } finally {
-      setLoading(true);
+      setLoadingDataLink(false);
     }
   }, [setData, setLoadingDataLink, valueSearch]);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
