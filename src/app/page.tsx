@@ -12,6 +12,7 @@ import { useDataLink } from "@/store/dataLink-store";
 import { usePopover } from "@/store/popover-store";
 import { DataLink, ResponsePayload } from "@/types";
 import DataLinkValidation from "@/validation/dataLink-validation";
+
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
@@ -91,6 +92,7 @@ export default function HomePage() {
       <BackgroundAnimated />
       <div className="relative z-10 container mx-auto px-2 py-8 max-w-7xl">
         <Header />
+
         <SearchBar />
       </div>
       {!data && loading ? (
