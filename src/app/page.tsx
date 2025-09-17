@@ -2,18 +2,55 @@
 import BackgroundAnimated from "@/components/BackgroundAnimated";
 import Card from "@/components/home/Card";
 import CardShell from "@/components/home/CardShell";
+import FormDataLink from "@/components/home/FormDataLink";
 import Header from "@/components/home/Header";
+import HeaderFormData from "@/components/home/HeaderFormData";
 import SearchBar from "@/components/home/SearchBar";
+import Popover from "@/components/Popover";
 import ResponseError from "@/error/ResponseError";
 import { useDataLink } from "@/store/dataLink-store";
+import { usePopover } from "@/store/popover-store";
 import { DataLink, ResponsePayload } from "@/types";
+import DataLinkValidation from "@/validation/dataLink-validation";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+import z from "zod";
 
 export default function HomePage() {
   const { data, setData, setLoading, loading, isChange, setIsChange } =
     useDataLink();
+  const { setOpenId } = usePopover();
+  const router = useRouter();
+  async function handleSubmit(
+    values: z.infer<typeof DataLinkValidation.DATALINK>
+  ) {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/link", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
 
+      const dataResponse = (await response.json()) as ResponsePayload;
+      if (dataResponse.status === "failed") {
+        throw new ResponseError(dataResponse.statusCode, dataResponse.message);
+      }
+      toast.success(dataResponse.message);
+      setIsChange(true);
+      setOpenId(null);
+      router.refresh();
+    } catch (error) {
+      if (error instanceof ResponseError) {
+        toast.error(error.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
   useEffect(() => {
     const getDataLink = async () => {
       setLoading(true);
@@ -76,10 +113,17 @@ export default function HomePage() {
           <p className="text-slate-400 mb-6 max-w-md">
             Mulai dengan menambahkan link pertama Anda
           </p>
-          <button className="bg-gradient-to-r from-primary-600 to-primary-500 flex items-center cursor-pointer hover:bg-gradient-to-br hover:from-primary-500 hover:to-primary-600 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300 transform hover:scale-105">
-            <i className="ri-add-line text-2xl"></i>
-            <span className="hidden sm:inline">Tambah Link Pertama</span>
-          </button>
+          <Popover
+            triggerElement={
+              <div className="bg-gradient-to-r w-fit mx-auto from-primary-600 to-primary-500 flex items-center cursor-pointer hover:bg-gradient-to-br hover:from-primary-500 hover:to-primary-600 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300 transform hover:scale-105">
+                <i className="ri-add-line text-2xl"></i>
+                <span className="hidden sm:inline">Tambah Link Pertama</span>
+              </div>
+            }
+          >
+            <HeaderFormData title="Tambah data link" />
+            <FormDataLink handleSubmit={handleSubmit} loading={loading} />
+          </Popover>
         </div>
       ) : (
         <CardShell>
