@@ -48,6 +48,40 @@ export default class LinkService {
       throw new ResponseError(501, "An error while get data Link");
     }
 
+    if (data.length === 0) {
+      const dataUrl = await supabase
+        .from("link")
+        .select("*")
+        .ilike("url", `%${q}%`);
+      if (!dataUrl.data && dataUrl.error) {
+        throw new ResponseError(401, dataUrl.error.message);
+      }
+
+      if (dataUrl.data.length === 0) {
+        const dataDesc = await supabase
+          .from("link")
+          .select("*")
+          .ilike("description", `%${q}%`);
+        if (!dataDesc.data && dataDesc.error) {
+          throw new ResponseError(401, dataDesc.error.message);
+        }
+
+        return {
+          status: "success",
+          message: "Successfully get data links!",
+          statusCode: 200,
+          data: dataDesc.data,
+        };
+      }
+
+      return {
+        status: "success",
+        message: "Successfully get data links!",
+        statusCode: 200,
+        data: dataUrl.data,
+      };
+    }
+
     return {
       status: "success",
       message: "Successfully get data links!",

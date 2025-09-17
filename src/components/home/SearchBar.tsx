@@ -6,9 +6,9 @@ import DataLinkValidation from "@/validation/dataLink-validation";
 import z from "zod";
 import ResponseError from "@/error/ResponseError";
 import toast from "react-hot-toast";
-import { ResponsePayload } from "@/types";
+import { DataLink, ResponsePayload } from "@/types";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { usePopover } from "@/store/popover-store";
 import { useDataLink } from "@/store/dataLink-store";
 
@@ -19,8 +19,52 @@ const Popover = dynamic(() => import("../Popover"), {
 export default function SearchBar() {
   const router = useRouter();
   const { setOpenId } = usePopover();
-  const { setIsChange } = useDataLink();
+  const {
+    setIsChange,
+    setLoading: setLoadingDataLink,
+    setData,
+  } = useDataLink();
   const [loading, setLoading] = useState(false);
+  const [valueSearch, setValueSearch] = useState<string>("");
+  const handleSearch = useCallback(async () => {
+    setLoadingDataLink(true);
+    try {
+      const query = valueSearch === "" ? "" : `?q=${valueSearch}`;
+      const response = await fetch(`/api/link${query}`);
+      const dataResponse = (await response.json()) as ResponsePayload<
+        DataLink[]
+      >;
+      if (dataResponse.status === "failed") {
+        throw new ResponseError(dataResponse.statusCode, dataResponse.message);
+      }
+      setData(dataResponse.data!);
+    } catch (error) {
+      if (error instanceof ResponseError) {
+        toast.error(error.message);
+        return;
+      }
+
+      toast.error("An error occured");
+    } finally {
+      setLoadingDataLink(false);
+    }
+  }, [setData, setLoadingDataLink, valueSearch]);
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    debounceRef.current = setTimeout(() => {
+      handleSearch();
+    }, 800);
+
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [valueSearch, handleSearch]);
+
   async function handleSubmit(
     values: z.infer<typeof DataLinkValidation.DATALINK>
   ) {
@@ -45,7 +89,10 @@ export default function SearchBar() {
     } catch (error) {
       if (error instanceof ResponseError) {
         toast.error(error.message);
+        return;
       }
+
+      toast.error("An error occured");
     } finally {
       setLoading(false);
     }
@@ -55,11 +102,13 @@ export default function SearchBar() {
     <div className="flex flex-col lg:flex-row gap-6 items-center justify-center mb-8 animate-slide-up">
       <div className="relative flex-1 w-full lg:max-w-2xl">
         <div className="w-full bg-slate-800/50 backdrop-blur-sm px-6 py-4 gap-x-4 border border-slate-600/30 rounded-2xl items-center flex">
-          <button>
+          <button type="button" onClick={handleSearch}>
             <i className="text-slate-400 ri-search-line"></i>
           </button>
           <input
             type="search"
+            onChange={(e) => setValueSearch(e.target.value)}
+            onKeyUp={handleSearch}
             placeholder="Cari link berdasarkan judul, deskripsi, atau URL..."
             className="w-full text-white placeholder-slate-400 focus:outline-none transition-all duration-300"
           />
