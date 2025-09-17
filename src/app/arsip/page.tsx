@@ -179,7 +179,28 @@ const MutasiTable: React.FC<TableProps> = ({ data }) => {
 
   return (
     <div className="min-h-screen p-4">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-5xl mx-auto">
+        {/* Footer Stats */}
+        <div className="mt-6 mb-4 bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="bg-gradient-to-r from-white/20 to-white/10 backdrop-blur-sm rounded-xl p-4 text-white border border-white/30">
+              <div className="text-2xl font-bold drop-shadow-lg">{data.length}</div>
+              <div className="text-sm text-white/80">Total Mutasi</div>
+            </div>
+            <div className="bg-gradient-to-r from-green-500/30 to-emerald-500/20 backdrop-blur-sm rounded-xl p-4 text-white border border-green-400/30">
+              <div className="text-2xl font-bold drop-shadow-lg">{data.filter(d => d.status === 'Selesai').length}</div>
+              <div className="text-sm text-white/80">Selesai</div>
+            </div>
+            <div className="bg-gradient-to-r from-yellow-500/30 to-orange-500/20 backdrop-blur-sm rounded-xl p-4 text-white border border-yellow-400/30">
+              <div className="text-2xl font-bold drop-shadow-lg">{data.filter(d => d.status === 'Proses').length}</div>
+              <div className="text-sm text-white/80">Dalam Proses</div>
+            </div>
+            <div className="bg-gradient-to-r from-purple-500/30 to-pink-500/20 backdrop-blur-sm rounded-xl p-4 text-white border border-purple-400/30">
+              <div className="text-2xl font-bold drop-shadow-lg">{archivedItems.size}</div>
+              <div className="text-sm text-white/80">Diarsipkan</div>
+            </div>
+          </div>
+        </div>
           {/* Header */}
           <div className="bg-white/10 backdrop-blur-xl rounded-t-2xl shadow-2xl border border-white/20">
             <div className="bg-gradient-to-r from-black/20 via-black/15 to-black/10 backdrop-blur-lg rounded-t-2xl px-8 py-6 border-b border-white/10">
@@ -336,27 +357,7 @@ const MutasiTable: React.FC<TableProps> = ({ data }) => {
           </div>
         </div>
 
-        {/* Footer Stats */}
-        <div className="mt-6 bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-gradient-to-r from-white/20 to-white/10 backdrop-blur-sm rounded-xl p-4 text-white border border-white/30">
-              <div className="text-2xl font-bold drop-shadow-lg">{data.length}</div>
-              <div className="text-sm text-white/80">Total Mutasi</div>
-            </div>
-            <div className="bg-gradient-to-r from-green-500/30 to-emerald-500/20 backdrop-blur-sm rounded-xl p-4 text-white border border-green-400/30">
-              <div className="text-2xl font-bold drop-shadow-lg">{data.filter(d => d.status === 'Selesai').length}</div>
-              <div className="text-sm text-white/80">Selesai</div>
-            </div>
-            <div className="bg-gradient-to-r from-yellow-500/30 to-orange-500/20 backdrop-blur-sm rounded-xl p-4 text-white border border-yellow-400/30">
-              <div className="text-2xl font-bold drop-shadow-lg">{data.filter(d => d.status === 'Proses').length}</div>
-              <div className="text-sm text-white/80">Dalam Proses</div>
-            </div>
-            <div className="bg-gradient-to-r from-purple-500/30 to-pink-500/20 backdrop-blur-sm rounded-xl p-4 text-white border border-purple-400/30">
-              <div className="text-2xl font-bold drop-shadow-lg">{archivedItems.size}</div>
-              <div className="text-sm text-white/80">Diarsipkan</div>
-            </div>
-          </div>
-        </div>
+        
       </div>
     </div>
   );
