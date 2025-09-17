@@ -15,3 +15,8 @@ export interface DataLink extends Link {
   id: string;
   created_at: string;
 }
+
+export interface User {
+  username: string;
+  password: string;
+}
