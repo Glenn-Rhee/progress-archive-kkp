@@ -1,5 +1,6 @@
-"use client"
+'use client';
 import React, { useState } from 'react';
+import BackgroundAnimated from '@/components/BackgroundAnimated';
 // Using Remix Icon classes instead of lucide-react
 // Make sure to include Remix Icon CSS: https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css
 
@@ -32,16 +33,16 @@ const sampleData: MutasiData[] = [
     no: 1,
     jenisMutasi: 'Promosi',
     status: 'Selesai',
-    nama: 'Dr. Faizh Adi Anugerah, S.Kom.M.Kom',
+    nama: 'Dr. Ahmad Wijaya, M.Si',
     nip: '196801051990031002',
-    golongan: 'IV/E',
-    pendidikan: 'S3 Teknologi Informasi',
+    golongan: 'IV/b',
+    pendidikan: 'S3 Administrasi Publik',
     jabatanLama: 'Kepala Bidang Perencanaan',
     unitKerjaLama: 'Dinas Pendidikan',
-    jabatanBaru: 'Dirjen',
-    unitKerjaBaru: 'Kementerian Kelautan Dan Perikanan',
+    jabatanBaru: 'Sekretaris Daerah',
+    unitKerjaBaru: 'Pemerintah Kota',
     catatan: 'Berlaku mulai 1 Januari 2025',
-    tanggalMutasi: '2025-01-01'
+    tanggalMutasi: '2025-01-01'
   },
   {
     id: '2',
@@ -177,140 +178,140 @@ const MutasiTable: React.FC<TableProps> = ({ data }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4">
+    <div className="min-h-screen p-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="bg-white rounded-t-2xl shadow-xl border-b-4 border-gradient-to-r from-blue-500 to-purple-600">
-          <div className="bg-gradient-to-r from-slate-800 via-slate-700 to-slate-900 rounded-t-2xl px-8 py-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="p-3 bg-white bg-opacity-20 rounded-xl backdrop-blur-sm">
-                  <i className="ri-file-text-line text-3xl text-white"></i>
+          {/* Header */}
+          <div className="bg-white/10 backdrop-blur-xl rounded-t-2xl shadow-2xl border border-white/20">
+            <div className="bg-gradient-to-r from-black/20 via-black/15 to-black/10 backdrop-blur-lg rounded-t-2xl px-8 py-6 border-b border-white/10">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl border border-white/30">
+                    <i className="ri-file-text-line text-3xl text-white drop-shadow-lg"></i>
+                  </div>
+                  <div>
+                    <h1 className="text-3xl font-bold text-white drop-shadow-lg">Data Mutasi Pegawai</h1>
+                    <p className="text-white/80 mt-1 drop-shadow">Sistem Informasi Kepegawaian - Dashboard Mutasi</p>
+                  </div>
                 </div>
-                <div>
-                  <h1 className="text-3xl font-bold text-white">Data Mutasi Pegawai</h1>
-                  <p className="text-slate-300 mt-1">Arsip Informasi Kepegawaian - Dashboard Mutasi</p>
+                <div className="flex items-center space-x-2 text-white/90">
+                  <i className="ri-calendar-line text-lg"></i>
+                  <span className="text-sm font-medium">September 2025</span>
                 </div>
-              </div>
-              <div className="flex items-center space-x-2 text-white">
-                <i className="ri-calendar-line text-lg"></i>
-                <span className="text-sm">September 2025</span>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Table */}
-        <div className="bg-white rounded-b-2xl shadow-xl overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              {/* Table Header */}
-              <thead className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider border-r border-white border-opacity-20">
+          {/* Table */}
+          <div className="bg-white/10 backdrop-blur-xl rounded-b-2xl shadow-2xl overflow-hidden border border-white/20 border-t-0">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                {/* Table Header */}
+                <thead className="bg-gradient-to-r from-white/20 via-white/15 to-white/10 backdrop-blur-lg border-b border-white/20">
+                  <tr>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-white/90 uppercase tracking-wider border-r border-white/10">
                     No
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider border-r border-white border-opacity-20">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-white/90 uppercase tracking-wider border-r border-white/10">
                     Jenis Mutasi
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider border-r border-white border-opacity-20">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-white/90 uppercase tracking-wider border-r border-white/10">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider border-r border-white border-opacity-20">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-white/90 uppercase tracking-wider border-r border-white/10">
                     Nama
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider border-r border-white border-opacity-20">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-white/90 uppercase tracking-wider border-r border-white/10">
                     NIP
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider border-r border-white border-opacity-20">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-white/90 uppercase tracking-wider border-r border-white/10">
                     Gol
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider border-r border-white border-opacity-20">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-white/90 uppercase tracking-wider border-r border-white/10">
                     Pendidikan
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider border-r border-white border-opacity-20">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-white/90 uppercase tracking-wider border-r border-white/10">
                     Jabatan Lama / Unit Kerja Lama
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider border-r border-white border-opacity-20">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-white/90 uppercase tracking-wider border-r border-white/10">
                     Jabatan Baru / Unit Kerja Baru
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider border-r border-white border-opacity-20">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-white/90 uppercase tracking-wider border-r border-white/10">
                     Catatan
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-white/90 uppercase tracking-wider">
                     Arsip
                   </th>
                 </tr>
               </thead>
 
               {/* Table Body */}
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-white/10">
                 {data.map((item, index) => (
                   <tr 
                     key={item.id} 
-                    className={`hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 ${
-                      index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                    } ${archivedItems.has(item.id) ? 'opacity-60 bg-gray-100' : ''}`}
+                    className={`hover:bg-white/20 backdrop-blur-sm transition-all duration-300 ${
+                      index % 2 === 0 ? 'bg-white/5' : 'bg-white/10'
+                    } ${archivedItems.has(item.id) ? 'opacity-60 bg-white/5' : ''} border-b border-white/5`}
                   >
-                    <td className="px-6 py-4 whitespace-nowrap border-r border-gray-200">
+                    <td className="px-6 py-4 whitespace-nowrap border-r border-white/10">
                       <div className="flex items-center justify-center">
-                        <span className="text-2xl font-bold text-transparent bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text">
+                        <span className="text-2xl font-bold text-white drop-shadow-lg">
                           {item.no.toString().padStart(3, '0')}
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap border-r border-gray-200">
+                    <td className="px-6 py-4 whitespace-nowrap border-r border-white/10">
                       <JenisMutasiBadge jenis={item.jenisMutasi} />
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap border-r border-gray-200">
+                    <td className="px-6 py-4 whitespace-nowrap border-r border-white/10">
                       <StatusBadge status={item.status} />
                     </td>
-                    <td className="px-6 py-4 border-r border-gray-200">
+                    <td className="px-6 py-4 border-r border-white/10">
                       <div className="flex items-center space-x-3">
                         <div className="flex-shrink-0 h-10 w-10">
-                          <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                          <div className="h-10 w-10 rounded-full bg-gradient-to-r from-white/20 to-white/30 backdrop-blur-sm border border-white/30 flex items-center justify-center">
                             <i className="ri-user-line text-lg text-white"></i>
                           </div>
                         </div>
                         <div>
-                          <div className="text-sm font-semibold text-gray-900">{item.nama}</div>
+                          <div className="text-sm font-semibold text-white drop-shadow">{item.nama}</div>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap border-r border-gray-200">
-                      <span className="font-mono text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                    <td className="px-6 py-4 whitespace-nowrap border-r border-white/10">
+                      <span className="font-mono text-sm text-white/80 bg-white/10 backdrop-blur-sm px-2 py-1 rounded border border-white/20">
                         {item.nip}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap border-r border-gray-200">
+                    <td className="px-6 py-4 whitespace-nowrap border-r border-white/10">
                       <GolonganBadge golongan={item.golongan} />
                     </td>
-                    <td className="px-6 py-4 border-r border-gray-200">
+                    <td className="px-6 py-4 border-r border-white/10">
                       <div className="flex items-center space-x-2">
-                        <i className="ri-graduation-cap-line text-lg text-indigo-500"></i>
-                        <span className="text-sm text-gray-700">{item.pendidikan}</span>
+                        <i className="ri-graduation-cap-line text-lg text-white/70"></i>
+                        <span className="text-sm text-white/90">{item.pendidikan}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 border-r border-gray-200">
+                    <td className="px-6 py-4 border-r border-white/10">
                       <div className="space-y-1">
-                        <div className="text-sm font-medium text-gray-900">{item.jabatanLama}</div>
+                        <div className="text-sm font-medium text-white/90">{item.jabatanLama}</div>
                         <div className="flex items-center space-x-1">
-                          <i className="ri-building-line text-xs text-gray-400"></i>
-                          <span className="text-xs text-gray-500">{item.unitKerjaLama}</span>
+                          <i className="ri-building-line text-xs text-white/60"></i>
+                          <span className="text-xs text-white/70">{item.unitKerjaLama}</span>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 border-r border-gray-200">
+                    <td className="px-6 py-4 border-r border-white/10">
                       <div className="space-y-1">
-                        <div className="text-sm font-medium text-gray-900">{item.jabatanBaru}</div>
+                        <div className="text-sm font-medium text-white/90">{item.jabatanBaru}</div>
                         <div className="flex items-center space-x-1">
-                          <i className="ri-building-line text-xs text-gray-400"></i>
-                          <span className="text-xs text-gray-500">{item.unitKerjaBaru}</span>
+                          <i className="ri-building-line text-xs text-white/60"></i>
+                          <span className="text-xs text-white/70">{item.unitKerjaBaru}</span>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 border-r border-gray-200">
-                      <div className="text-sm text-gray-600 italic max-w-xs">
+                    <td className="px-6 py-4 border-r border-white/10">
+                      <div className="text-sm text-white/80 italic max-w-xs">
                         {item.catatan}
                       </div>
                     </td>
@@ -318,10 +319,10 @@ const MutasiTable: React.FC<TableProps> = ({ data }) => {
                       <button
                         onClick={() => handleArchive(item.id, item.nama)}
                         disabled={archivedItems.has(item.id)}
-                        className={`inline-flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                        className={`inline-flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 backdrop-blur-sm border ${
                           archivedItems.has(item.id)
-                            ? 'bg-green-100 text-green-800 cursor-not-allowed'
-                            : 'bg-gradient-to-r from-slate-600 to-slate-700 text-white hover:from-slate-700 hover:to-slate-800 hover:shadow-lg transform hover:-translate-y-0.5'
+                            ? 'bg-green-500/20 text-green-100 cursor-not-allowed border-green-400/30'
+                            : 'bg-white/10 text-white hover:bg-white/20 hover:shadow-lg transform hover:-translate-y-0.5 border-white/30'
                         }`}
                       >
                         <i className={`${archivedItems.has(item.id) ? 'ri-check-line' : 'ri-archive-line'} text-base`}></i>
@@ -336,23 +337,23 @@ const MutasiTable: React.FC<TableProps> = ({ data }) => {
         </div>
 
         {/* Footer Stats */}
-        <div className="mt-6 bg-white rounded-2xl shadow-lg p-6">
+        <div className="mt-6 bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-4 text-white">
-              <div className="text-2xl font-bold">{data.length}</div>
-              <div className="text-sm opacity-90">Total Mutasi</div>
+            <div className="bg-gradient-to-r from-white/20 to-white/10 backdrop-blur-sm rounded-xl p-4 text-white border border-white/30">
+              <div className="text-2xl font-bold drop-shadow-lg">{data.length}</div>
+              <div className="text-sm text-white/80">Total Mutasi</div>
             </div>
-            <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl p-4 text-white">
-              <div className="text-2xl font-bold">{data.filter(d => d.status === 'Selesai').length}</div>
-              <div className="text-sm opacity-90">Selesai</div>
+            <div className="bg-gradient-to-r from-green-500/30 to-emerald-500/20 backdrop-blur-sm rounded-xl p-4 text-white border border-green-400/30">
+              <div className="text-2xl font-bold drop-shadow-lg">{data.filter(d => d.status === 'Selesai').length}</div>
+              <div className="text-sm text-white/80">Selesai</div>
             </div>
-            <div className="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl p-4 text-white">
-              <div className="text-2xl font-bold">{data.filter(d => d.status === 'Proses').length}</div>
-              <div className="text-sm opacity-90">Dalam Proses</div>
+            <div className="bg-gradient-to-r from-yellow-500/30 to-orange-500/20 backdrop-blur-sm rounded-xl p-4 text-white border border-yellow-400/30">
+              <div className="text-2xl font-bold drop-shadow-lg">{data.filter(d => d.status === 'Proses').length}</div>
+              <div className="text-sm text-white/80">Dalam Proses</div>
             </div>
-            <div className="bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl p-4 text-white">
-              <div className="text-2xl font-bold">{archivedItems.size}</div>
-              <div className="text-sm opacity-90">Diarsipkan</div>
+            <div className="bg-gradient-to-r from-purple-500/30 to-pink-500/20 backdrop-blur-sm rounded-xl p-4 text-white border border-purple-400/30">
+              <div className="text-2xl font-bold drop-shadow-lg">{archivedItems.size}</div>
+              <div className="text-sm text-white/80">Diarsipkan</div>
             </div>
           </div>
         </div>
@@ -363,7 +364,14 @@ const MutasiTable: React.FC<TableProps> = ({ data }) => {
 
 // Main App Component
 const App: React.FC = () => {
-  return <MutasiTable data={sampleData} />;
+  return (
+    <div className="relative">
+      <BackgroundAnimated />
+      <div className="relative z-10">
+        <MutasiTable data={sampleData} />
+      </div>
+    </div>
+  );
 };
 
 export default App;
