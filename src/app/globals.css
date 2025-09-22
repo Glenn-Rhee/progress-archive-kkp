@@ -68,3 +68,14 @@
         }
     }
 }
+
+/* Hilangkan icon mata bawaan Edge/IE */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
+
+/* Hilangkan icon bawaan Safari (iOS/macOS) */
+input[type="password"]::-webkit-textfield-decoration-container {
+    display: none;
+}

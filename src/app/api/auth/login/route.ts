@@ -11,7 +11,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const body = await req.text();
     const dataBody = JSON.parse(body);
     Validation.validate(UserValidation.USER, dataBody);
-    const response = await UserSevice.createUser(dataBody);
+    const response = await UserSevice.loginUser(dataBody);
     return NextResponse.json<ResponsePayload>(response);
   } catch (error) {
     console.log("Error Link Route:", error);

@@ -13,7 +13,7 @@ export default class UserSevice {
       .select("*")
       .eq("username", data.username);
     if (dataUser.error) {
-      throw new ResponseError(401, dataUser.error.message);
+      throw new ResponseError(401, "Error while login");
     }
     if (dataUser.data.length > 0) {
       throw new ResponseError(402, "Username already exists");
@@ -25,7 +25,8 @@ export default class UserSevice {
       password: passwordHashed,
     });
     if (response.error) {
-      throw new ResponseError(401, response.error.message);
+      console.log(response.error);
+      throw new ResponseError(401, "Error while login");
     }
     const token = JWT.generateToken({
       username: data.username,

@@ -1,3 +1,4 @@
+"use client";
 import { useAlertStore } from "@/store/alert-store";
 
 export default function Alert() {
