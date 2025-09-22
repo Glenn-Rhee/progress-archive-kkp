@@ -10,12 +10,16 @@ export async function middleware(req: NextRequest) {
   const token = tokenCookie ? tokenCookie.value : null;
 
   if (url.includes("/api/auth")) {
-    if (url.includes("/login") && token) {
-      return NextResponse.json<ResponsePayload>({
-        status: "failed",
-        statusCode: 403,
-        message: "You have been loged in!",
-      });
+    if (url.includes("/login")) {
+      if (token) {
+        return NextResponse.json<ResponsePayload>({
+          status: "failed",
+          statusCode: 403,
+          message: "You have been loged in!",
+        });
+      } else {
+        return NextResponse.next();
+      }
     }
 
     if (!token) {
