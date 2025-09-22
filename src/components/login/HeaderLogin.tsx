@@ -1,15 +1,16 @@
+import Image from "next/image";
+
 export default function HeaderLogin() {
   return (
-    <div className="text-center mb-10">
-      <div
-        className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-6 text-3xl text-white"
-        style={{
-          background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-          boxShadow: "0 8px 32px rgba(99, 102, 241, 0.4)",
-          animation: "glow 3s ease-in-out infinite",
-        }}
-      >
-        🔗
+    <div className="text-center mb-8">
+      <div className="flex-col relative items-center justify-center mt-1 hover:scale-105 w-fit right-1/2 left-1/2 -translate-x-1/2">
+        <Image
+          src="/dirjen.png"
+          alt="djpt logo"
+          width={140}
+          height={140}
+          className="mb-2 flex justify-center p-2"
+        />
       </div>
 
       <h1
