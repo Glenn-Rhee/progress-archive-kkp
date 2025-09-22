@@ -1,12 +1,57 @@
+"use client";
+import ResponseError from "@/error/ResponseError";
+import { ResponsePayload } from "@/types";
+import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function Header({ token }: { token: string | undefined }) {
+  const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
+
+  async function handleLogout() {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/auth", {
+        method: "DELETE",
+      });
+
+      const dataResponse = (await response.json()) as ResponsePayload;
+      if (dataResponse.status === "failed") {
+        throw new ResponseError(dataResponse.statusCode, dataResponse.message);
+      }
+
+      toast.success(dataResponse.message);
+      router.refresh();
+    } catch (error) {
+      if (error instanceof ResponseError) {
+        toast.error(error.message);
+        return;
+      }
+
+      toast.error("An error occured, please try again later");
+    } finally {
+      setLoading(false);
+    }
+  }
   return (
     <div className="bg-slate-800/50 relative backdrop-blur-xl border border-slate-700/50 rounded-3xl p-8 mb-8 shadow-2xl animate-fade-in">
       <div className="flex justify-end p-2 w-fit absolute top-4 right-4 rounded-full hover:scale-105 transition-transform duration-100">
         {token ? (
-          <button className="group relative overflow-hidden cursor-pointer bg-gradient-to-r from-red-500 to-red-700 hover:from-red-500 hover:to-red-400 px-4 py-2 rounded-xl font-semibold text-white transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-primary-500/25">
+          <button
+            onClick={handleLogout}
+            disabled={loading}
+            type="button"
+            className={clsx(
+              "group relative overflow-hidden px-4 py-2 rounded-xl font-semibold text-white",
+              loading
+                ? "cursor-not-allowed bg-slate-500/50"
+                : "cursor-pointer bg-gradient-to-r from-red-500 to-red-700 hover:from-red-500 hover:to-red-400 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-primary-500/25"
+            )}
+          >
             Logout
           </button>
         ) : (
