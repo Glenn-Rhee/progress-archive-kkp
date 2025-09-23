@@ -9,8 +9,7 @@ export default function LoginPage() {
     <div
       className="min-h-screen flex items-center justify-center p-5 relative overflow-hidden"
       style={{
-        background:
-          "linear-gradient(135deg, #0f0f23 0%, #1e1b4b 25%, #312e81 50%, #1e1b4b 75%, #0f0f23 100%)",
+        background: "linear-gradient(135deg, #59AC77 0%, #3A6F43 25%,)",
       }}
     >
       <BackButton />
