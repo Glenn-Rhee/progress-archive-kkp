@@ -34,6 +34,17 @@ export default function FormDataLink(props: FormDataLinkProps) {
   });
 
   useEffect(() => {
+    if (data) {
+      form.reset({
+        description: data.description,
+        title: data.title,
+        url: data.url,
+        isPrivate: data.isPrivate,
+      });
+    }
+  }, [data, form]);
+
+  useEffect(() => {
     if (!openId) {
       form.reset();
     }
