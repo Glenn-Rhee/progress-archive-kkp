@@ -87,7 +87,7 @@ export default function Cards() {
       {Array.from({ length: 6 }).map((_, i) => (
         <div
           key={i}
-          className="bg-slate-800/40 backdrop-blur-sm border border-slate-700/30 rounded-2xl p-6 hover:border-primary-500/30 hover:bg-slate-800/60 transition-all duration-300 animate-pulse h-[15rem]"
+          className="bg-slate-900/50 backdrop-blur-sm border border-slate-700/30 rounded-2xl p-6 hover:border-primary-500/30 hover:bg-slate-800/60 transition-all duration-300 animate-pulse h-[15rem]"
         ></div>
       ))}
     </CardShell>
