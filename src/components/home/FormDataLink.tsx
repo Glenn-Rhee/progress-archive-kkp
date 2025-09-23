@@ -1,5 +1,5 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import DataLinkValidation from "@/validation/dataLink-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,6 +28,7 @@ export default function FormDataLink(props: FormDataLinkProps) {
       description: data?.description,
       title: data?.title,
       url: data?.url,
+      isPrivate: data?.isPrivate || false,
     },
   });
 
@@ -107,6 +108,26 @@ export default function FormDataLink(props: FormDataLinkProps) {
           </p>
         )}
       </div>
+      <Controller
+        name="isPrivate"
+        control={form.control}
+        render={({ field }) => (
+          <div className="flex items-center gap-x-2 px-1">
+            <input
+              checked={field.value}
+              onChange={(e) => field.onChange(e.target.checked)}
+              type="checkbox"
+              id="isPrivate"
+            />
+            <label
+              htmlFor="isPrivate"
+              className="text-sm font-semibold text-slate-300"
+            >
+              Checklist kotak di samping ini jika link ini mau bersifat private
+            </label>
+          </div>
+        )}
+      />
 
       <div className="flex gap-3 pt-4">
         <button

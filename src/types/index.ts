@@ -9,6 +9,7 @@ export interface Link {
   title: string;
   url: string;
   description?: string;
+  isPrivate: boolean;
 }
 
 export interface DataLink extends Link {
