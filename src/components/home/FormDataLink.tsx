@@ -75,17 +75,26 @@ export default function FormDataLink(props: FormDataLinkProps) {
         >
           URL
         </label>
-        <input
-          {...form.register("url")}
-          type="text"
-          id={isForEdit ? "editUrl" : "url"}
-          className="w-full bg-slate-700/50 border border-slate-600/30 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-primary-500/50 focus:bg-slate-700/70 transition-all duration-300"
-          placeholder="https://example.com"
-        />
-        {form.formState.errors.url && (
-          <p className="text-red-700 text-sm font-semibold mt-1 ml-1">
-            {form.formState.errors.url.message}
-          </p>
+        {!form.getValues("isPrivate") || token ? (
+          <>
+            <input
+              {...form.register("url")}
+              type="text"
+              id={isForEdit ? "editUrl" : "url"}
+              className="w-full bg-slate-700/50 border border-slate-600/30 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-primary-500/50 focus:bg-slate-700/70 transition-all duration-300"
+              placeholder="https://example.com"
+            />
+            {form.formState.errors.url && (
+              <p className="text-red-700 text-sm font-semibold mt-1 ml-1">
+                {form.formState.errors.url.message}
+              </p>
+            )}
+          </>
+        ) : (
+          <div className="w-full flex flex-col gap-y-2 bg-slate-700/50 border border-slate-600/30 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-primary-500/50 focus:bg-slate-700/70 transition-all duration-300">
+            <div className="w-full bg-slate-600/40 h-2 rounded-xs" />
+            <div className="w-full bg-slate-600/40 h-2 rounded-xs" />
+          </div>
         )}
       </div>
 
