@@ -15,10 +15,11 @@ interface FormDataLinkProps {
   isForEdit?: boolean;
   loading: boolean;
   data?: DataLink;
+  token: string | undefined;
 }
 
 export default function FormDataLink(props: FormDataLinkProps) {
-  const { handleSubmit, isForEdit, loading, data } = props;
+  const { handleSubmit, isForEdit, loading, data, token } = props;
   const { setOpenId, openId } = usePopover();
 
   const form = useForm<z.infer<typeof DataLinkValidation.DATALINK>>({
@@ -108,26 +109,29 @@ export default function FormDataLink(props: FormDataLinkProps) {
           </p>
         )}
       </div>
-      <Controller
-        name="isPrivate"
-        control={form.control}
-        render={({ field }) => (
-          <div className="flex items-center gap-x-2 px-1">
-            <input
-              checked={field.value}
-              onChange={(e) => field.onChange(e.target.checked)}
-              type="checkbox"
-              id="isPrivate"
-            />
-            <label
-              htmlFor="isPrivate"
-              className="text-sm font-semibold text-slate-300"
-            >
-              Checklist kotak di samping ini jika link ini mau bersifat private
-            </label>
-          </div>
-        )}
-      />
+      {token ? (
+        <Controller
+          name="isPrivate"
+          control={form.control}
+          render={({ field }) => (
+            <div className="flex items-center gap-x-2 px-1">
+              <input
+                checked={field.value}
+                onChange={(e) => field.onChange(e.target.checked)}
+                type="checkbox"
+                id="isPrivate"
+              />
+              <label
+                htmlFor="isPrivate"
+                className="text-sm font-semibold text-slate-300"
+              >
+                Checklist kotak di samping ini jika link ini mau bersifat
+                private
+              </label>
+            </div>
+          )}
+        />
+      ) : null}
 
       <div className="flex gap-3 pt-4">
         <button

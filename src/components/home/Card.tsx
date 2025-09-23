@@ -17,10 +17,11 @@ import clsx from "clsx";
 
 interface CardProps {
   data: DataLink;
+  token: string | undefined;
 }
 
 export default function Card(props: CardProps) {
-  const { data } = props;
+  const { data, token } = props;
   const { setOpenId } = usePopover();
   const { setIsChange } = useDataLink();
   const [loading, setLoading] = useState(false);
@@ -129,6 +130,7 @@ export default function Card(props: CardProps) {
           >
             <HeaderFormData title="Edit Link" />
             <FormDataLink
+              token={token}
               data={data}
               loading={loading}
               isForEdit

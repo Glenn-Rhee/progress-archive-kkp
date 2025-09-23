@@ -14,7 +14,12 @@ import { useEffect } from "react";
 import toast from "react-hot-toast";
 import z from "zod";
 
-export default function Cards() {
+interface CardsProps {
+  token: string | undefined;
+}
+
+export default function Cards(props: CardsProps) {
+  const { token } = props;
   const { data, setData, setLoading, loading, isChange, setIsChange } =
     useDataLink();
   const { setOpenId } = usePopover();
@@ -109,7 +114,11 @@ export default function Cards() {
         }
       >
         <HeaderFormData title="Tambah data link" />
-        <FormDataLink handleSubmit={handleSubmit} loading={loading} />
+        <FormDataLink
+          token={token}
+          handleSubmit={handleSubmit}
+          loading={loading}
+        />
       </Popover>
     </div>
   ) : (
@@ -117,7 +126,7 @@ export default function Cards() {
       {data!
         .sort((a, b) => a.title.localeCompare(b.title))
         .map((d) => (
-          <Card key={d.id} data={d} />
+          <Card key={d.id} data={d} token={token} />
         ))}
     </CardShell>
   );
