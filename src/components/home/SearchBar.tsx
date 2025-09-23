@@ -16,7 +16,12 @@ const Popover = dynamic(() => import("../Popover"), {
   ssr: false,
 });
 
-export default function SearchBar() {
+interface SearchBarProps {
+  token: string | undefined;
+}
+
+export default function SearchBar(props: SearchBarProps) {
+  const { token } = props;
   const router = useRouter();
   const { setOpenId } = usePopover();
   const {
@@ -130,7 +135,11 @@ export default function SearchBar() {
           }
         >
           <HeaderFormData title="Tambah data link" />
-          <FormDataLink handleSubmit={handleSubmit} loading={loading} />
+          <FormDataLink
+            handleSubmit={handleSubmit}
+            token={token}
+            loading={loading}
+          />
         </Popover>
       </div>
     </div>

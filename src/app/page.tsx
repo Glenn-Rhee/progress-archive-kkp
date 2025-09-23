@@ -12,9 +12,9 @@ export default async function HomePage() {
       <BackgroundAnimated />
       <div className="relative z-10 container mx-auto px-2 py-8 max-w-7xl">
         <Header token={token} />
-        <SearchBar />
+        <SearchBar token={token} />
       </div>
-      <Cards />
+      <Cards token={token} />
     </div>
   );
 }

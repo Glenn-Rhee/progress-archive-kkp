@@ -9,5 +9,6 @@ export default class DataLinkValidation {
     description: z
       .string({ error: "Please fill descriptions properly!" })
       .optional(),
+    isPrivate: z.boolean({ error: "Please fill field properly" }).optional(),
   });
 }

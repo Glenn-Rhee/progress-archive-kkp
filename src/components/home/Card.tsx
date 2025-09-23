@@ -17,10 +17,11 @@ import clsx from "clsx";
 
 interface CardProps {
   data: DataLink;
+  token: string | undefined;
 }
 
 export default function Card(props: CardProps) {
-  const { data } = props;
+  const { data, token } = props;
   const { setOpenId } = usePopover();
   const { setIsChange } = useDataLink();
   const [loading, setLoading] = useState(false);
@@ -129,6 +130,7 @@ export default function Card(props: CardProps) {
           >
             <HeaderFormData title="Edit Link" />
             <FormDataLink
+              token={token}
               data={data}
               loading={loading}
               isForEdit
@@ -172,19 +174,30 @@ export default function Card(props: CardProps) {
       <div className="bg-slate-900/50 border border-slate-600/20 rounded-xl p-4 mb-4">
         <div className="flex items-center gap-3">
           <div className="flex-1 min-w-0">
-            <Link
-              target="_blank"
-              href={data.url}
-              className="text-primary-400 hover:text-primary-300 font-medium text-sm break-all transition-colors duration-200"
-            >
-              {data.url}
-            </Link>
+            {!data.isPrivate || token ? (
+              <Link
+                target="_blank"
+                href={data.url}
+                className="text-primary-400 hover:text-primary-300 font-medium text-sm break-all transition-colors duration-200"
+              >
+                {data.url}
+              </Link>
+            ) : (
+              <div className="w-full flex flex-col gap-y-1">
+                <div className="w-full bg-slate-600/40 h-2 rounded-xs" />
+                <div className="w-full bg-slate-600/40 h-2 rounded-xs" />
+              </div>
+            )}
           </div>
           <button
             type="button"
             onClick={() => {
               if (!isCopy) {
-                copyTextToClipboard(data.url);
+                if (!data.isPrivate || token) {
+                  copyTextToClipboard(data.url);
+                } else {
+                  toast.error("Oops! Anda tidak memiliki akses ke link ini");
+                }
               }
             }}
             className="cursor-pointer w-8 h-8 bg-slate-700/50 hover:bg-slate-600/50 rounded-lg flex items-center justify-center text-slate-400 hover:text-white transition-all duration-200"

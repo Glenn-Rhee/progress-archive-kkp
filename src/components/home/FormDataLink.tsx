@@ -1,5 +1,5 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import DataLinkValidation from "@/validation/dataLink-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,10 +15,11 @@ interface FormDataLinkProps {
   isForEdit?: boolean;
   loading: boolean;
   data?: DataLink;
+  token: string | undefined;
 }
 
 export default function FormDataLink(props: FormDataLinkProps) {
-  const { handleSubmit, isForEdit, loading, data } = props;
+  const { handleSubmit, isForEdit, loading, data, token } = props;
   const { setOpenId, openId } = usePopover();
 
   const form = useForm<z.infer<typeof DataLinkValidation.DATALINK>>({
@@ -28,6 +29,7 @@ export default function FormDataLink(props: FormDataLinkProps) {
       description: data?.description,
       title: data?.title,
       url: data?.url,
+      isPrivate: data?.isPrivate || false,
     },
   });
 
@@ -73,17 +75,26 @@ export default function FormDataLink(props: FormDataLinkProps) {
         >
           URL
         </label>
-        <input
-          {...form.register("url")}
-          type="text"
-          id={isForEdit ? "editUrl" : "url"}
-          className="w-full bg-slate-700/50 border border-slate-600/30 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-primary-500/50 focus:bg-slate-700/70 transition-all duration-300"
-          placeholder="https://example.com"
-        />
-        {form.formState.errors.url && (
-          <p className="text-red-700 text-sm font-semibold mt-1 ml-1">
-            {form.formState.errors.url.message}
-          </p>
+        {!form.getValues("isPrivate") || token ? (
+          <>
+            <input
+              {...form.register("url")}
+              type="text"
+              id={isForEdit ? "editUrl" : "url"}
+              className="w-full bg-slate-700/50 border border-slate-600/30 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-primary-500/50 focus:bg-slate-700/70 transition-all duration-300"
+              placeholder="https://example.com"
+            />
+            {form.formState.errors.url && (
+              <p className="text-red-700 text-sm font-semibold mt-1 ml-1">
+                {form.formState.errors.url.message}
+              </p>
+            )}
+          </>
+        ) : (
+          <div className="w-full flex flex-col gap-y-2 bg-slate-700/50 border border-slate-600/30 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-primary-500/50 focus:bg-slate-700/70 transition-all duration-300">
+            <div className="w-full bg-slate-600/40 h-2 rounded-xs" />
+            <div className="w-full bg-slate-600/40 h-2 rounded-xs" />
+          </div>
         )}
       </div>
 
@@ -107,6 +118,29 @@ export default function FormDataLink(props: FormDataLinkProps) {
           </p>
         )}
       </div>
+      {token ? (
+        <Controller
+          name="isPrivate"
+          control={form.control}
+          render={({ field }) => (
+            <div className="flex items-center gap-x-2 px-1">
+              <input
+                checked={field.value}
+                onChange={(e) => field.onChange(e.target.checked)}
+                type="checkbox"
+                id="isPrivate"
+              />
+              <label
+                htmlFor="isPrivate"
+                className="text-sm font-semibold text-slate-300"
+              >
+                Checklist kotak di samping ini jika link ini mau bersifat
+                private
+              </label>
+            </div>
+          )}
+        />
+      ) : null}
 
       <div className="flex gap-3 pt-4">
         <button
