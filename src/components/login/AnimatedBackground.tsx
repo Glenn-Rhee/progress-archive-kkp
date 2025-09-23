@@ -1,6 +1,6 @@
 export default function AnimatedBackground() {
   return (
-    <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0">
+    <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-20">
       <div
         className="absolute rounded-full"
         style={{

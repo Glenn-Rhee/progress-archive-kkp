@@ -175,22 +175,7 @@ export default function FormLogin() {
         type="submit"
         onClick={() => form.handleSubmit(handleSubmit)()}
         disabled={isLoading}
-        className="w-full p-4 rounded-xl text-white font-semibold relative overflow-hidden transition-all duration-300 disabled:opacity-50"
-        style={{
-          background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-        }}
-        onMouseEnter={(e) => {
-          const target = e.target as HTMLElement;
-          if (!isLoading) {
-            target.style.transform = "translateY(-2px)";
-            target.style.boxShadow = "0 12px 40px rgba(99, 102, 241, 0.4)";
-          }
-        }}
-        onMouseLeave={(e) => {
-          const target = e.target as HTMLElement;
-          target.style.transform = "translateY(0)";
-          target.style.boxShadow = "none";
-        }}
+        className="w-full p-4 rounded-xl text-white font-semibold relative overflow-hidden transition-all duration-300 disabled:opacity-50 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-500 hover:to-orange-400 "
       >
         <div className="flex items-center justify-center">
           {isLoading ? <BeatLoader /> : "Masuk ke Dashboard"}

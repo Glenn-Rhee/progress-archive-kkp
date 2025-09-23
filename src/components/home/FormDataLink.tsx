@@ -48,7 +48,7 @@ export default function FormDataLink(props: FormDataLinkProps) {
     if (!openId) {
       form.reset();
     }
-  }, [openId, form]); 
+  }, [openId, form]);
 
   return (
     <form
@@ -161,7 +161,7 @@ export default function FormDataLink(props: FormDataLinkProps) {
             form.handleSubmit(handleSubmit)();
           }}
           disabled={loading}
-          className="flex-1 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 px-6 py-3 rounded-xl font-medium cursor-pointer text-white transition-all duration-300 transform hover:scale-105"
+          className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-500 hover:to-orange-400 px-6 py-3 rounded-xl font-medium cursor-pointer text-white transition-all duration-300 transform hover:scale-105"
         >
           {loading ? (
             <BeatLoader />

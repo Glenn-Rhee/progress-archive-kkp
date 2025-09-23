@@ -1,4 +1,6 @@
 import Alert from "@/components/Alert";
+import BackgroundAnimated from "@/components/BackgroundAnimated";
+import AnimatedBackground from "@/components/login/AnimatedBackground";
 import BackButton from "@/components/login/BackButton";
 import BorderEffect from "@/components/login/BorderEffect";
 import FormLogin from "@/components/login/FormLogin";
@@ -13,18 +15,10 @@ export default function LoginPage() {
       }}
     >
       <BackButton />
+      <BackgroundAnimated />
       {/* Login Container */}
       <div className="relative z-10 w-full max-w-lg">
-        <div
-          className="relative rounded-3xl p-12 overflow-hidden"
-          style={{
-            background: "rgba(30, 41, 59, 0.5)",
-            backdropFilter: "blur(24px)",
-            border: "1px solid rgba(71, 85, 105, 0.5)",
-            boxShadow: "0 25px 50px rgba(0, 0, 0, 0.25)",
-            animation: "fadeIn 1s ease-out",
-          }}
-        >
+        <div className="relative rounded-3xl p-12 overflow-hidden bg-slate-900/50 border border-slate-700/30">
           <BorderEffect />
           <HeaderLogin />
           <Alert />
