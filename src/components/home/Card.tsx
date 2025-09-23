@@ -110,12 +110,13 @@ export default function Card(props: CardProps) {
   }, [isCopy]);
 
   return (
-    <div className="group bg-slate-900/50 backdrop-blur-sm border border-slate-700/30 rounded-2xl p-6 hover:border-primary-500/30 hover:bg-slate-800/60 transition-all duration-300 animate-fade-in">
-      <div className="flex items-start justify-between mb-4">
+    <div className="group relative bg-slate-900/50 overflow-hidden backdrop-blur-sm border border-slate-700/30 rounded-2xl p-6 hover:border-primary-500/30 hover:bg-slate-800/60 transition-all duration-300 animate-fade-in">
+      <h3 className="bg-gradient-to-r from-orange-500 to-orange-600 absolute top-0 py-2 right-0 left-0 text-xl  ps-6 w-full font-bold text-white mb-2 group-hover:text-primary-400 transition-colors line-clamp-2">
+        {data.title}
+      </h3>
+
+      <div className="flex items-start justify-between mt-7 mb-4">
         <div className="flex-1 min-w-0">
-          <h3 className="text-xl font-bold text-white mb-2 group-hover:text-primary-400 transition-colors line-clamp-2">
-            {data.title}
-          </h3>
           <p className="text-slate-400 text-sm leading-relaxed mb-4 line-clamp-3">
             {data.description}
           </p>

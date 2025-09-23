@@ -48,7 +48,7 @@ export default function FormDataLink(props: FormDataLinkProps) {
     if (!openId) {
       form.reset();
     }
-  }, [openId, form]);
+  }, [openId, form]); 
 
   return (
     <form
