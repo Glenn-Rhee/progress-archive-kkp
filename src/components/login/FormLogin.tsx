@@ -175,12 +175,33 @@ export default function FormLogin() {
         type="submit"
         onClick={() => form.handleSubmit(handleSubmit)()}
         disabled={isLoading}
-        className="w-full p-4 rounded-xl text-white font-semibold relative overflow-hidden transition-all duration-300 disabled:opacity-50 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-500 hover:to-orange-400 "
+        className="group w-full p-4 rounded-xl text-white font-semibold relative overflow-hidden transition-all duration-300 disabled:opacity-50 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-500 hover:to-orange-400"
       >
-        <div className="flex items-center justify-center">
+        <span
+          className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 
+                       transform -skew-x-12 -translate-x-full 
+                       group-hover:translate-x-full 
+                       transition-transform duration-700 rounded-xl"
+        ></span>
+
+        <div className="flex items-center justify-center relative z-10">
           {isLoading ? <BeatLoader /> : "Masuk ke Dashboard"}
         </div>
       </button>
+
+      {/* Link to Signup */}
+      <div className="text-center mt-6">
+        <p className="text-sm" style={{ color: "#cbd5e1" }}>
+          Belum punya akun?{" "}
+          <button
+            type="button"
+            onClick={() => router.push("/auth/signup")}
+            className="font-medium text-orange-400 hover:text-orange-300 transition-colors duration-200"
+          >
+            Sign up
+          </button>
+        </p>
+      </div>
     </form>
   );
 }

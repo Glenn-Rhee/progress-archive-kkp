@@ -110,9 +110,16 @@ export default function Cards(props: CardsProps) {
       </p>
       <Popover
         triggerElement={
-          <div className="bg-gradient-to-r w-fit mx-auto from-primary-600 to-primary-500 flex items-center cursor-pointer hover:bg-gradient-to-br hover:from-primary-500 hover:to-primary-600 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300 transform hover:scale-105">
-            <i className="ri-add-line text-2xl"></i>
-            <span className="hidden sm:inline">Tambah Link Pertama</span>
+          <div className="relative group w-fit mx-auto">
+            <div className="group relative overflow-hidden cursor-pointer bg-gradient-to-r from-orange-500 to-orange-700 hover:from-orange-500 hover:to-orange-400 px-6 py-3 rounded-2xl font-semibold text-white transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-primary-500/25">
+              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+
+              <i className="ri-add-line text-2xl relative z-10"></i>
+
+              <span className="hidden sm:inline relative z-10">
+                Tambah Link Pertama
+              </span>
+            </div>
           </div>
         }
       >
