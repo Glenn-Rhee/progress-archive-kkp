@@ -102,6 +102,7 @@ export default class UserSevice {
       data: {
         title: user.data[0].title,
         descriptionUser: user.data[0].descriptionUser,
+        username: user.data[0].username,
       },
     };
   }

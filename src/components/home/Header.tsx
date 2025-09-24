@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 interface DataUser {
   title: string;
   descriptionUser: string;
+  username: string;
 }
 
 export default function Header({ token }: { token: string | undefined }) {
@@ -84,6 +85,20 @@ export default function Header({ token }: { token: string | undefined }) {
   }, [isChange, setIsChange]);
   return (
     <div className="bg-slate-900/50 relative backdrop-blur-xl border border-slate-800/50 rounded-3xl p-8 mb-8 shadow-2xl animate-fade-in">
+      <div className="flex justify-start p-2 w-fit absolute top-4 left-4 rounded-full hover:scale-105 transition-transform duration-100">
+        {token ? (
+          <span
+            className={clsx(
+              "relative hover:scale-100 z-10 px-4 py-2 rounded-xl font-semibold text-white",
+              loading
+                ? "h-10 w-[90px] rounded-md bg-slate-600/20"
+                : "h-fit bg-gradient-to-r from-orange-500 to-orange-700"
+            )}
+          >
+            {loading ? "" : dataUser?.username}
+          </span>
+        ) : null}
+      </div>
       <div className="flex justify-end p-2 w-fit absolute top-4 right-4 rounded-full hover:scale-105 transition-transform duration-100">
         {token ? (
           <button
