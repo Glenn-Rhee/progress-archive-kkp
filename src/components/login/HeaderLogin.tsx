@@ -13,20 +13,13 @@ export default function HeaderLogin() {
         />
       </div>
 
-      <h1
-        className="text-5xl font-black mb-2 text-white"
-      >
-        ARSIP PROGRESS
-      </h1>
+      <h1 className="text-5xl font-black mb-2 text-white">ARSIP PROGRESS</h1>
 
       <p className="text-xl font-light mb-4 text-white">
         MONITORING DAN EVALUASI TU SDMAO DJPT TAHUN 2025
       </p>
 
-      <div
-        className="w-24 h-1 mx-auto rounded-full bg-gradient-to-r from-orange-500 to-orange-600"
-        
-      />
+      <div className="w-24 h-1 mx-auto rounded-full bg-gradient-to-r from-orange-500 to-orange-600" />
     </div>
   );
 }

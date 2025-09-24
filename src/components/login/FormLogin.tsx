@@ -190,13 +190,13 @@ export default function FormLogin() {
       </button>
 
       {/* Link to Signup */}
-      <div className="text-center mt-6">
+      <div className="text-center mt-3">
         <p className="text-sm" style={{ color: "#cbd5e1" }}>
           Belum punya akun?{" "}
           <button
             type="button"
             onClick={() => router.push("/auth/signup")}
-            className="font-medium text-orange-400 hover:text-orange-300 transition-colors duration-200"
+            className="font-medium cursor-pointer text-orange-400 hover:text-orange-300 transition-colors duration-200"
           >
             Sign up
           </button>

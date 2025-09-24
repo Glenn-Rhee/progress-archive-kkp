@@ -2,6 +2,7 @@
 import ResponseError from "@/error/ResponseError";
 import { useAlertStore } from "@/store/alert-store";
 import { ResponsePayload } from "@/types";
+import UserValidation from "@/validation/user-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -10,42 +11,20 @@ import toast from "react-hot-toast";
 import { BeatLoader } from "react-spinners";
 import z from "zod";
 
-// Extended validation schema for signup
-const SignupValidation = z
-  .object({
-    username: z
-      .string()
-      .min(3, "Username minimal 3 karakter")
-      .max(20, "Username maksimal 20 karakter"),
-    password: z.string().min(6, "Password minimal 6 karakter"),
-    confirmPassword: z
-      .string()
-      .min(6, "Konfirmasi password minimal 6 karakter"),
-    title: z.string().min(2, "Title minimal 2 karakter"),
-    description: z
-      .string()
-      .min(10, "Description minimal 10 karakter")
-      .max(500, "Description maksimal 500 karakter"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Password dan konfirmasi password harus sama",
-    path: ["confirmPassword"],
-  });
-
 export default function FormSignup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { setType, setMessage, setIsVisible } = useAlertStore();
   const [isLoading, setIsLoading] = useState(false);
-  const form = useForm<z.infer<typeof SignupValidation>>({
-    resolver: zodResolver(SignupValidation),
+  const form = useForm<z.infer<typeof UserValidation.CREATEUSER>>({
+    resolver: zodResolver(UserValidation.CREATEUSER),
     mode: "onChange",
     defaultValues: {
       username: "",
       password: "",
       confirmPassword: "",
       title: "",
-      description: "",
+      descriptionUser: "",
     },
   });
   const router = useRouter();
@@ -72,7 +51,9 @@ export default function FormSignup() {
     }
   }, [form.formState.errors, showAlert, setIsVisible]);
 
-  async function handleSubmit(values: z.infer<typeof SignupValidation>) {
+  async function handleSubmit(
+    values: z.infer<typeof UserValidation.CREATEUSER>
+  ) {
     setIsLoading(true);
     try {
       const response = await fetch("/api/auth/signup", {
@@ -80,12 +61,7 @@ export default function FormSignup() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          username: values.username,
-          password: values.password,
-          title: values.title,
-          description: values.description,
-        }),
+        body: JSON.stringify(values),
       });
 
       const responseData = (await response.json()) as ResponsePayload;
@@ -94,7 +70,7 @@ export default function FormSignup() {
       }
 
       toast.success("Akun berhasil dibuat! Silakan login.");
-      router.push("/login");
+      router.push("/");
     } catch (error) {
       if (error instanceof ResponseError) {
         showAlert("error", error.message);
@@ -277,13 +253,13 @@ export default function FormSignup() {
           style={inputStyle}
           placeholder="Ceritakan sedikit tentang diri Anda..."
           rows={4}
-          {...form.register("description", {
+          {...form.register("descriptionUser", {
             onBlur: inputBlurHandler,
           })}
           onFocus={inputFocusHandler}
         />
         <p className="text-xs mt-1" style={{ color: "#64748b" }}>
-          {form.watch("description")?.length || 0}/500 karakter
+          {form.watch("descriptionUser")?.length || 0}/500 karakter
         </p>
       </div>
 
@@ -291,7 +267,7 @@ export default function FormSignup() {
       <button
         type="submit"
         disabled={isLoading}
-        className="group w-full p-4 rounded-xl text-white font-semibold relative overflow-hidden 
+        className="group cursor-pointer w-full p-4 rounded-xl text-white font-semibold relative overflow-hidden 
              transition-all duration-300 disabled:opacity-50 
              bg-gradient-to-r from-orange-500 to-orange-600 
              hover:from-orange-500 hover:to-orange-400"
@@ -308,13 +284,13 @@ export default function FormSignup() {
       </button>
 
       {/* Link to Login */}
-      <div className="text-center mt-6">
+      <div className="text-center mt-3">
         <p className="text-sm" style={{ color: "#cbd5e1" }}>
           Sudah punya akun?{" "}
           <button
             type="button"
             onClick={() => router.push("/auth/login")}
-            className="font-medium text-orange-400 hover:text-orange-300 transition-colors duration-200"
+            className="font-medium cursor-pointer text-orange-400 hover:text-orange-300 transition-colors duration-200"
           >
             Login
           </button>
