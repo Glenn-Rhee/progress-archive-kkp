@@ -1,11 +1,12 @@
+"use client";
 import Alert from "@/components/Alert";
 import BackgroundAnimated from "@/components/BackgroundAnimated";
 import BackButton from "@/components/login/BackButton";
 import BorderEffect from "@/components/login/BorderEffect";
-import FormLogin from "@/components/login/FormLogin";
 import HeaderLogin from "@/components/login/HeaderLogin";
+import FormSignup from "@/components/signup/FormSignUp";
 
-export default function LoginPage() {
+export default function SignUpPage() {
   return (
     <div
       className="min-h-screen flex items-center justify-center p-5 relative overflow-hidden"
@@ -21,7 +22,7 @@ export default function LoginPage() {
           <BorderEffect />
           <HeaderLogin />
           <Alert />
-          <FormLogin />
+          <FormSignup />
         </div>
       </div>
     </div>

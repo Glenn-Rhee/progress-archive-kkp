@@ -57,14 +57,25 @@ export default function Header({ token }: { token: string | undefined }) {
         ) : (
           <Link
             href="/auth/login"
-            className="group relative overflow-hidden cursor-pointer bg-gradient-to-r from-orange-500 to-orange-700 hover:from-orange-500 hover:to-orange-400 px-4 py-2 rounded-xl font-semibold text-white transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-primary-500/25"
+            className="group relative overflow-hidden cursor-pointer 
+             bg-gradient-to-r from-orange-500 to-orange-700 
+             hover:from-orange-500 hover:to-orange-400 
+             px-4 py-2 rounded-xl font-semibold text-white 
+             transition-all duration-300 transform hover:scale-105 
+             hover:shadow-2xl hover:shadow-primary-500/25"
           >
-            LOGIN
+            <span
+              className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 
+               transform -skew-x-12 -translate-x-full 
+               group-hover:translate-x-full 
+               transition-transform duration-700 rounded-xl"
+            ></span>
+
+            <span className="relative z-10">LOGIN</span>
           </Link>
         )}
       </div>
 
-      {/* Main content centered */}
       <div className="text-center">
         <div className="flex-col relative items-center justify-center mt-1 hover:scale-105 w-fit right-1/2 left-1/2 -translate-x-1/2">
           <Image
