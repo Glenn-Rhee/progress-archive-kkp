@@ -3,9 +3,26 @@ import { Link, ResponsePayload } from "@/types";
 import { supabase } from "@/utils/supabase/server";
 
 export default class LinkService {
-  static async createDataLink(dataUser: Link): Promise<ResponsePayload> {
-    const createdDataLink = await supabase.from("link").insert<Link>([
+  static async createDataLink(
+    dataUser: Link,
+    username: string
+  ): Promise<ResponsePayload> {
+    const user = await supabase
+      .from("user")
+      .select("*")
+      .eq("username", username);
+
+    if (user.error) {
+      throw new ResponseError(501, "An error occured");
+    }
+
+    if (user.data.length === 0) {
+      throw new ResponseError(404, "User is not found!");
+    }
+
+    const createdDataLink = await supabase.from("link").insert([
       {
+        idUser: user.data[0].id,
         ...dataUser,
       },
     ]);

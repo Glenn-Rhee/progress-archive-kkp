@@ -1,18 +1,35 @@
 import ResponseError from "@/error/ResponseError";
+import JWT from "@/lib/jwt";
 import LinkService from "@/service/link-service";
 import { Link, ResponsePayload } from "@/types";
 import DataLinkValidation from "@/validation/dataLink-validation";
 import Validation from "@/validation/Validation";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token");
+    if (!token) {
+      cookieStore.delete("token");
+      throw new ResponseError(403, "You have to login!");
+    }
+
+    const decoded = JWT.verifyToken(token.value);
+    if (!decoded) {
+      throw new ResponseError(503, "Invalid or expired token!");
+    }
+
     const body = await req.text();
     const dataBody = JSON.parse(body) as Link;
     Validation.validate(DataLinkValidation.DATALINK, dataBody);
 
-    const response = await LinkService.createDataLink(dataBody);
+    const response = await LinkService.createDataLink(
+      dataBody,
+      decoded.username
+    );
     return NextResponse.json<ResponsePayload>(response);
   } catch (error) {
     console.log("Error Link Route:", error);
