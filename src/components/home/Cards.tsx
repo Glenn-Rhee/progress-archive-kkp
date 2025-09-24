@@ -48,7 +48,7 @@ export default function Cards(props: CardsProps) {
     } catch (error) {
       if (error instanceof ResponseError) {
         toast.error(error.message);
-        return
+        return;
       }
 
       toast.error("An error occured!");

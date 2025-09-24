@@ -10,7 +10,7 @@ export async function middleware(req: NextRequest) {
   const token = tokenCookie ? tokenCookie.value : null;
 
   if (url.includes("/api/auth")) {
-    if (url.includes("/login")) {
+    if (url.includes("/login") || url.includes("/signup")) {
       if (token) {
         return NextResponse.json<ResponsePayload>({
           status: "failed",
