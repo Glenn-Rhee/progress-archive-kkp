@@ -28,3 +28,8 @@ export interface CreateUser {
   title: string;
   descriptionUser: string;
 }
+
+export interface DataUser extends CreateUser {
+  id: string;
+  created_at: string;
+}

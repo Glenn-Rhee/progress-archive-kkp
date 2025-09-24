@@ -1,16 +1,25 @@
 "use client";
 import ResponseError from "@/error/ResponseError";
+import { useDataLink } from "@/store/dataLink-store";
 import { ResponsePayload } from "@/types";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+
+interface DataUser {
+  title: string;
+  descriptionUser: string;
+}
 
 export default function Header({ token }: { token: string | undefined }) {
   const router = useRouter();
-  const [loading, setLoading] = useState<boolean>(false);
+  const { isChange, setIsChange } = useDataLink();
+  const [dataUser, setDataUser] = useState<DataUser | null>(null);
+
+  const [loading, setLoading] = useState<boolean>(true);
 
   async function handleLogout() {
     setLoading(true);
@@ -25,6 +34,7 @@ export default function Header({ token }: { token: string | undefined }) {
       }
 
       toast.success(dataResponse.message);
+      setIsChange(true);
       router.refresh();
     } catch (error) {
       if (error instanceof ResponseError) {
@@ -37,6 +47,41 @@ export default function Header({ token }: { token: string | undefined }) {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    const getUser = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch("/api/user");
+        const dataResponse =
+          (await response.json()) as ResponsePayload<DataUser>;
+        if (dataResponse.status === "failed") {
+          throw new ResponseError(
+            dataResponse.statusCode,
+            dataResponse.message
+          );
+        }
+
+        setDataUser(dataResponse.data!);
+      } catch (error) {
+        setDataUser(null);
+        if (error instanceof ResponseError) {
+          toast.error(error.message);
+          return;
+        }
+
+        toast.error("An error occured");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getUser();
+    if (isChange) {
+      setIsChange(false);
+      getUser();
+    }
+  }, [isChange, setIsChange]);
   return (
     <div className="bg-slate-900/50 relative backdrop-blur-xl border border-slate-800/50 rounded-3xl p-8 mb-8 shadow-2xl animate-fade-in">
       <div className="flex justify-end p-2 w-fit absolute top-4 right-4 rounded-full hover:scale-105 transition-transform duration-100">
@@ -86,11 +131,25 @@ export default function Header({ token }: { token: string | undefined }) {
             className="mb-4 flex justify-center p-2"
           />
         </div>
-        <h1 className="text-5xl font-black bg-[#f1ede0] bg-clip-text text-transparent mb-2">
-          ARSIP PROGRESS
+        <h1
+          className={clsx(
+            "text-5xl font-black mb-2",
+            loading
+              ? "h-4 bg-slate-700/40 max-w-lg mx-auto rounded-md"
+              : "bg-[#f1ede0] h-fit bg-clip-text text-transparent"
+          )}
+        >
+          {loading ? "" : dataUser?.title}
         </h1>
-        <p className="text-xl text-slate-300 font-light">
-          MONITORING DAN EVALUASI TU SDMAO DJPT TAHUN 2025
+        <p
+          className={clsx(
+            "text-xl text-slate-300 font-light",
+            loading
+              ? "h-2 bg-slate-700/40 max-w-lg mx-auto rounded-md"
+              : "h-fit"
+          )}
+        >
+          {loading ? "" : dataUser?.descriptionUser}
         </p>
         <div className="w-40 h-1 bg-gradient-to-r from-orange-500 to-orange-600 mx-auto mt-4 rounded-full"></div>
       </div>

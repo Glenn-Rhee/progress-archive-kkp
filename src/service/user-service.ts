@@ -26,7 +26,7 @@ export default class UserSevice {
       title: data.title,
       descriptionUser: data.descriptionUser,
     });
-    
+
     if (response.error) {
       console.log(response.error);
       throw new ResponseError(401, "Error while login");
@@ -83,6 +83,26 @@ export default class UserSevice {
       status: "success",
       message: "Login Successful",
       statusCode: 200,
+    };
+  }
+  static async getUserData(username: string | null): Promise<ResponsePayload> {
+    const user = await supabase
+      .from("user")
+      .select("*")
+      .eq("username", username || "dfa.arsip");
+
+    if (user.error) {
+      throw new ResponseError(401, user.error.message);
+    }
+
+    return {
+      status: "success",
+      statusCode: 200,
+      message: "Successfully get user",
+      data: {
+        title: user.data[0].title,
+        descriptionUser: user.data[0].descriptionUser,
+      },
     };
   }
 }
