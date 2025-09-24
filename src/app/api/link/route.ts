@@ -58,7 +58,16 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 export async function GET(req: NextRequest): Promise<NextResponse> {
   try {
     const query = req.nextUrl.searchParams;
-    const response = await LinkService.getDataLink(query);
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token");
+    let username: string | null = null;
+    if (token) {
+      const decoded = JWT.verifyToken(token.value);
+      if (decoded) {
+        username = decoded.username;
+      }
+    }
+    const response = await LinkService.getDataLink(query, username);
 
     return NextResponse.json<ResponsePayload>(response);
   } catch (error) {
@@ -87,8 +96,20 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
 export async function PUT(req: NextRequest): Promise<NextResponse> {
   try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token");
+    if (!token) {
+      cookieStore.delete("token");
+      throw new ResponseError(403, "You have to login!");
+    }
+
+    const decoded = JWT.verifyToken(token.value);
+    if (!decoded) {
+      throw new ResponseError(503, "Invalid or expired token!");
+    }
     const id = req.nextUrl.searchParams.get("id");
     if (!id) throw new ResponseError(404, "Id of link is required!");
+
     const body = await req.text();
     const dataBody = JSON.parse(body) as Link;
     Validation.validate(DataLinkValidation.DATALINK, dataBody);
@@ -122,6 +143,18 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
 
 export async function DELETE(req: NextRequest): Promise<NextResponse> {
   try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token");
+    if (!token) {
+      cookieStore.delete("token");
+      throw new ResponseError(403, "You have to login!");
+    }
+
+    const decoded = JWT.verifyToken(token.value);
+    if (!decoded) {
+      throw new ResponseError(503, "Invalid or expired token!");
+    }
+    
     const id = req.nextUrl.searchParams.get("id");
     if (!id) {
       throw new ResponseError(402, "Id is required for this method!");

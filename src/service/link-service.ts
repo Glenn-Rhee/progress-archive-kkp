@@ -39,11 +39,30 @@ export default class LinkService {
     };
   }
 
-  static async getDataLink(query: URLSearchParams): Promise<ResponsePayload> {
+  static async getDataLink(
+    query: URLSearchParams,
+    username: string | null
+  ): Promise<ResponsePayload> {
     const q = query.get("q");
 
+    const user = await supabase
+      .from("user")
+      .select("*")
+      .eq("username", username || "dfa.arsip");
+
+    if (user.error) {
+      throw new ResponseError(501, "An error occured");
+    }
+
+    if (user.data.length === 0) {
+      throw new ResponseError(404, "User is not found!");
+    }
+
     if (!q) {
-      const { data, error } = await supabase.from("link").select("*");
+      const { data, error } = await supabase
+        .from("link")
+        .select("*")
+        .eq("idUser", user.data[0].id);
       if (!data && error) {
         throw new ResponseError(501, "An error while get data Link");
       }
@@ -59,7 +78,8 @@ export default class LinkService {
     const { data, error } = await supabase
       .from("link")
       .select("*")
-      .ilike("title", `%${q}%`);
+      .ilike("title", `%${q}%`)
+      .eq("idUser", user.data[0].id);
 
     if (!data && error) {
       throw new ResponseError(501, "An error while get data Link");
@@ -69,7 +89,9 @@ export default class LinkService {
       const dataUrl = await supabase
         .from("link")
         .select("*")
-        .ilike("url", `%${q}%`);
+        .ilike("url", `%${q}%`)
+        .eq("idUser", user.data[0].id);
+
       if (!dataUrl.data && dataUrl.error) {
         throw new ResponseError(401, dataUrl.error.message);
       }
@@ -78,7 +100,9 @@ export default class LinkService {
         const dataDesc = await supabase
           .from("link")
           .select("*")
-          .ilike("description", `%${q}%`);
+          .ilike("description", `%${q}%`)
+          .eq("idUser", user.data[0].id);
+
         if (!dataDesc.data && dataDesc.error) {
           throw new ResponseError(401, dataDesc.error.message);
         }
@@ -109,7 +133,7 @@ export default class LinkService {
 
   static async updateDataLink(
     id: string,
-    dataUser: Link
+    dataUser: Link,
   ): Promise<ResponsePayload> {
     const { data, error } = await supabase
       .from("link")
