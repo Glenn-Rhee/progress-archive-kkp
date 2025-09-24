@@ -115,7 +115,7 @@ export default function Card(props: CardProps) {
         {data.title}
       </h3>
 
-      <div className="flex items-start justify-between mt-7 mb-4">
+      <div className="flex items-start justify-between mt-8 mb-1">
         <div className="flex-1 min-w-0">
           <p className="text-slate-400 text-sm leading-relaxed mb-4 line-clamp-3">
             {data.description}
