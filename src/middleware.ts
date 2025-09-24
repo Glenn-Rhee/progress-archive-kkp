@@ -8,26 +8,38 @@ export async function middleware(req: NextRequest) {
   const tokenCookie = cookieStore.get("token");
 
   const token = tokenCookie ? tokenCookie.value : null;
+  if (url.includes("/api")) {
+    if (url.includes("/auth")) {
+      if (url.includes("/login") || url.includes("/signup")) {
+        if (token) {
+          return NextResponse.json<ResponsePayload>({
+            status: "failed",
+            statusCode: 403,
+            message: "You have been loged in!",
+          });
+        } else {
+          return NextResponse.next();
+        }
+      }
 
-  if (url.includes("/api/auth")) {
-    if (url.includes("/login")) {
-      if (token) {
+      if (!token) {
         return NextResponse.json<ResponsePayload>({
           status: "failed",
-          statusCode: 403,
-          message: "You have been loged in!",
+          statusCode: 402,
+          message: "Oops you have to login before logout",
         });
-      } else {
-        return NextResponse.next();
       }
     }
 
-    if (!token) {
-      return NextResponse.json<ResponsePayload>({
-        status: "failed",
-        statusCode: 402,
-        message: "Oops you have to login before logout",
-      });
+    if (url.includes("/link")) {
+      const method = req.method;
+      if (method !== "GET" && !token) {
+        return NextResponse.json<ResponsePayload>({
+          status: "failed",
+          statusCode: 403,
+          message: "Forbidden! Anda belum memiliki akses!",
+        });
+      }
     }
   } else {
     if (url.includes("/auth") && token) {

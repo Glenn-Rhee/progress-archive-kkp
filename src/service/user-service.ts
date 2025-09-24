@@ -1,12 +1,12 @@
 import ResponseError from "@/error/ResponseError";
 import Bcrypt from "@/lib/bcrypt";
 import JWT from "@/lib/jwt";
-import { ResponsePayload, User } from "@/types";
+import { CreateUser, ResponsePayload, User } from "@/types";
 import { supabase } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 
 export default class UserSevice {
-  static async createUser(data: User): Promise<ResponsePayload> {
+  static async createUser(data: CreateUser): Promise<ResponsePayload> {
     const coockieStore = await cookies();
     const dataUser = await supabase
       .from("user")
@@ -23,7 +23,10 @@ export default class UserSevice {
     const response = await supabase.from("user").insert({
       username: data.username,
       password: passwordHashed,
+      title: data.title,
+      descriptionUser: data.descriptionUser,
     });
+    
     if (response.error) {
       console.log(response.error);
       throw new ResponseError(401, "Error while login");
