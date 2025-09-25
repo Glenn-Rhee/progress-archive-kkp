@@ -13,7 +13,7 @@ export default class UserValidation {
   static readonly CREATEUSER = z
     .object({
       username: z
-      .string({ error: "Please fill username properly!" })
+        .string({ error: "Please fill username properly!" })
         .min(1, { error: "Minimum of length username is 1" }),
       password: z
         .string({ error: "Please fill password properly!" })
@@ -33,4 +33,14 @@ export default class UserValidation {
       message: "Password dan konfirmasi password harus sama",
       path: ["confirmPassword"],
     });
+
+  static readonly PUTUSER = z.object({
+    title: z
+      .string({ error: "Please fill title properly!" })
+      .min(2, "Title minimal 2 karakter"),
+    descriptionUser: z
+      .string({ error: "Please fill description properly!" })
+      .min(10, "Description minimal 10 karakter")
+      .max(500, "Description maksimal 500 karakter"),
+  });
 }

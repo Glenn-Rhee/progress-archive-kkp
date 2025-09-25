@@ -33,3 +33,8 @@ export interface DataUser extends CreateUser {
   id: string;
   created_at: string;
 }
+
+export interface DataPutUser {
+  title: string;
+  descriptionUser: string;
+}

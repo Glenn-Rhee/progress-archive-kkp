@@ -6,6 +6,7 @@ export async function middleware(req: NextRequest) {
   const cookieStore = await cookies();
   const url = req.nextUrl.pathname;
   const tokenCookie = cookieStore.get("token");
+  const method = req.method;
 
   const token = tokenCookie ? tokenCookie.value : null;
   if (url.includes("/api")) {
@@ -32,13 +33,24 @@ export async function middleware(req: NextRequest) {
     }
 
     if (url.includes("/link")) {
-      const method = req.method;
       if (method !== "GET" && !token) {
         return NextResponse.json<ResponsePayload>({
           status: "failed",
           statusCode: 403,
           message: "Forbidden! Anda belum memiliki akses!",
         });
+      }
+    }
+
+    if (url.includes("/user")) {
+      if (method !== "GET") {
+        if (!token) {
+          return NextResponse.json<ResponsePayload>({
+            status: "failed",
+            statusCode: 403,
+            message: "Forbidden! Anda belum memiliki akses!",
+          });
+        }
       }
     }
   } else {
