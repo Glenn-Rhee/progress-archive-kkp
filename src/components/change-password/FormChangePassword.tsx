@@ -2,6 +2,7 @@
 import ResponseError from "@/error/ResponseError";
 import { useAlertStore } from "@/store/alert-store";
 import { ResponsePayload } from "@/types";
+import UserValidation from "@/validation/user-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -10,33 +11,19 @@ import toast from "react-hot-toast";
 import { BeatLoader } from "react-spinners";
 import z from "zod";
 
-// Validation schema for change password
-const ChangePasswordValidation = z
-  .object({
-    currentPassword: z.string().min(1, "Password saat ini wajib diisi"),
-    newPassword: z.string().min(8, "Password baru minimal 8 karakter"),
-    confirmNewPassword: z
-      .string()
-      .min(1, "Konfirmasi password baru wajib diisi"),
-  })
-  .refine((data) => data.newPassword === data.confirmNewPassword, {
-    message: "Password baru dan konfirmasi password tidak cocok",
-    path: ["confirmNewPassword"],
-  });
-
 export default function FormChangePassword() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
   const { setType, setMessage, setIsVisible } = useAlertStore();
   const [isLoading, setIsLoading] = useState(false);
-  const form = useForm<z.infer<typeof ChangePasswordValidation>>({
-    resolver: zodResolver(ChangePasswordValidation),
+  const form = useForm<z.infer<typeof UserValidation.PUTPASSWORD>>({
+    resolver: zodResolver(UserValidation.PUTPASSWORD),
     mode: "onChange",
     defaultValues: {
       currentPassword: "",
-      newPassword: "",
-      confirmNewPassword: "",
+      password: "",
+      confirmPassword: "",
     },
   });
   const router = useRouter();
@@ -64,12 +51,12 @@ export default function FormChangePassword() {
   }, [form.formState.errors, showAlert, setIsVisible]);
 
   async function handleSubmit(
-    values: z.infer<typeof ChangePasswordValidation>
+    values: z.infer<typeof UserValidation.PUTPASSWORD>
   ) {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/auth/change-password", {
-        method: "POST",
+      const response = await fetch("/api/user/password", {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
@@ -81,15 +68,15 @@ export default function FormChangePassword() {
         throw new ResponseError(responseData.statusCode, responseData.message);
       }
 
-      toast.success("Password berhasil diubah!");
-      form.reset();
+      toast.success(responseData.message);
+      router.push("/");
     } catch (error) {
       if (error instanceof ResponseError) {
         showAlert("error", error.message);
         return;
       }
 
-      toast.error("Terjadi kesalahan yang tidak terduga.");
+      toast.error("An error occured, please try again later.");
     } finally {
       setIsLoading(false);
     }
@@ -178,7 +165,7 @@ export default function FormChangePassword() {
             className="w-full p-4 rounded-xl text-white pr-12 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             style={inputStyle}
             placeholder="Masukkan password baru"
-            {...form.register("newPassword", {
+            {...form.register("password", {
               onBlur: inputBlurHandler,
             })}
             onFocus={inputFocusHandler}
@@ -221,7 +208,7 @@ export default function FormChangePassword() {
             className="w-full p-4 rounded-xl text-white pr-12 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             style={inputStyle}
             placeholder="Konfirmasi password baru"
-            {...form.register("confirmNewPassword", {
+            {...form.register("confirmPassword", {
               onBlur: inputBlurHandler,
             })}
             onFocus={inputFocusHandler}

@@ -187,7 +187,7 @@ export default class UserSevice {
     return {
       status: "success",
       statusCode: 201,
-      message: "Successfully update data user!",
+      message: "Successfully update password user!",
     };
   }
 }
