@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import Dropdown from "../Dropdown";
 
 interface DataUser {
   title: string;
@@ -85,18 +86,36 @@ export default function Header({ token }: { token: string | undefined }) {
   }, [isChange, setIsChange]);
   return (
     <div className="bg-slate-900/50 relative backdrop-blur-xl border border-slate-800/50 rounded-3xl p-8 mb-8 shadow-2xl animate-fade-in">
-      <div className="flex justify-start p-2 w-fit absolute top-4 left-4 rounded-full hover:scale-105 transition-transform duration-100">
+      <div className="flex justify-start p-2 w-fit absolute top-4 left-4 rounded-full transition-transform duration-100">
         {token ? (
-          <span
-            className={clsx(
-              "relative hover:scale-100 z-10 px-4 py-2 rounded-xl font-semibold text-white",
-              loading
-                ? "h-10 w-[90px] rounded-md bg-slate-600/20"
-                : "h-fit bg-gradient-to-r from-orange-500 to-orange-700"
-            )}
+          <Dropdown
+            className="flex flex-col items-start gap-y-2 px-2"
+            triggerElement={
+              <span
+                className={clsx(
+                  "relative z-10 px-4 py-2 rounded-xl font-semibold text-white",
+                  loading
+                    ? "h-10 w-[90px] rounded-md bg-slate-600/20"
+                    : "h-fit bg-gradient-to-r from-orange-500 to-orange-700"
+                )}
+              >
+                {loading ? "" : dataUser?.username}
+              </span>
+            }
           >
-            {loading ? "" : dataUser?.username}
-          </span>
+            <Link
+              href={"/edit-user"}
+              className="w-full rounded-md hover:text-slate-900 transition-colors duration-200 text-sm font-medium py-2 hover:bg-slate-300 ps-3"
+            >
+              Edit Profile
+            </Link>
+            <Link
+              href={"/change-password"}
+              className="w-full rounded-md hover:text-slate-900 transition-colors duration-200 text-sm font-medium py-2 hover:bg-slate-300 ps-3"
+            >
+             Ganti Password
+            </Link>
+          </Dropdown>
         ) : null}
       </div>
       <div className="flex justify-end p-2 w-fit absolute top-4 right-4 rounded-full hover:scale-105 transition-transform duration-100">
