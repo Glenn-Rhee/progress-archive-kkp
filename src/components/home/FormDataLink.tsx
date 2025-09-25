@@ -20,7 +20,7 @@ interface FormDataLinkProps {
 
 export default function FormDataLink(props: FormDataLinkProps) {
   const { handleSubmit, isForEdit, loading, data, token } = props;
-  const { setOpenId, openId } = usePopover();
+  const { setOpenId, openId, autoFocus } = usePopover();
 
   const form = useForm<z.infer<typeof DataLinkValidation.DATALINK>>({
     resolver: zodResolver(DataLinkValidation.DATALINK),
@@ -66,6 +66,7 @@ export default function FormDataLink(props: FormDataLinkProps) {
           Judul Link
         </label>
         <input
+          autoFocus={autoFocus}
           {...form.register("title")}
           type="text"
           id={isForEdit ? "editTitle" : "title"}

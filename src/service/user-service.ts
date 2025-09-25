@@ -1,7 +1,7 @@
 import ResponseError from "@/error/ResponseError";
 import Bcrypt from "@/lib/bcrypt";
 import JWT from "@/lib/jwt";
-import { CreateUser, ResponsePayload, User } from "@/types";
+import { CreateUser, DataPutUser, ResponsePayload, User } from "@/types";
 import { supabase } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 
@@ -104,6 +104,40 @@ export default class UserSevice {
         descriptionUser: user.data[0].descriptionUser,
         username: user.data[0].username,
       },
+    };
+  }
+  static async putUserData(
+    data: DataPutUser,
+    username: string
+  ): Promise<ResponsePayload> {
+    const dataUser = await supabase
+      .from("user")
+      .select("*")
+      .eq("username", username);
+
+    if (dataUser.error) {
+      console.log(dataUser.error);
+      throw new ResponseError(401, "An error while edit data!");
+    }
+
+    if (dataUser.data.length === 0) {
+      throw new ResponseError(404, "Oops! User is not found!");
+    }
+
+    const updateUser = await supabase
+      .from("user")
+      .update(data)
+      .eq("id", dataUser.data[0].id);
+
+    if (updateUser.error) {
+      console.log(updateUser.error);
+      throw new ResponseError(401, "An error while edit data!");
+    }
+
+    return {
+      status: "success",
+      message: "Successfully update user",
+      statusCode: 201,
     };
   }
 }
