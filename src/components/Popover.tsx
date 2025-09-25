@@ -3,13 +3,15 @@ import { usePopover } from "@/store/popover-store";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { createPortal } from "react-dom";
+import clsx from "clsx";
 interface PopoverProps {
   triggerElement: React.ReactNode;
   children: React.ReactNode;
+  className?: string;
 }
 
 export default function Popover(props: PopoverProps) {
-  const { triggerElement, children } = props;
+  const { triggerElement, children, className } = props;
   const { openId, setOpenId, setAutoFocus } = usePopover();
   const id = useId();
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -102,7 +104,7 @@ export default function Popover(props: PopoverProps) {
           setAutoFocus(true);
         }}
         ref={triggerRef}
-        className="cursor-pointer w-full"
+        className={clsx("cursor-pointer w-full", className)}
       >
         {triggerElement}
       </button>

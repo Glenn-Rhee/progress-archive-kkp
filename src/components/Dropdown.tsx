@@ -58,7 +58,7 @@ export default function Dropdown(props: DropdownProps) {
         transition={{ duration: 0.3, ease: "easeOut" }}
         onMouseLeave={hideDropdown}
         className={clsx(
-          "absolute cursor-auto mt-2 border-[#2c2f4f] border rounded-xl bg-slate-700 top-full left-1/2 z-20 -translate-x-1/2 p-3 w-[20rem]",
+          "absolute cursor-auto mt-2 border-[#2c2f4f] border rounded-xl bg-slate-700 top-full left-0 z-20 p-3 w-[20rem]",
           className
         )}
       >
