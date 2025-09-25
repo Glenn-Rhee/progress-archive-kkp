@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Dropdown from "../Dropdown";
 import Popover from "../Popover";
-import EditForm from "../EditForm";
+import EditForm from "./EditForm";
 
 interface DataUser {
   title: string;
@@ -22,7 +22,6 @@ export default function Header({ token }: { token: string | undefined }) {
   const router = useRouter();
   const { isChange, setIsChange } = useDataLink();
   const [dataUser, setDataUser] = useState<DataUser | null>(null);
-
   const [loading, setLoading] = useState<boolean>(true);
 
   async function handleLogout() {
@@ -113,7 +112,7 @@ export default function Header({ token }: { token: string | undefined }) {
                 </span>
               }
             >
-              <EditForm />
+              <EditForm data={dataUser}/>
             </Popover>
             <Link
               href={"/change-password"}
