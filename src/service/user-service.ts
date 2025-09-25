@@ -1,7 +1,13 @@
 import ResponseError from "@/error/ResponseError";
 import Bcrypt from "@/lib/bcrypt";
 import JWT from "@/lib/jwt";
-import { CreateUser, DataPutUser, ResponsePayload, User } from "@/types";
+import {
+  CreateUser,
+  DataPutUser,
+  PasswordPutData,
+  ResponsePayload,
+  User,
+} from "@/types";
 import { supabase } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 
@@ -138,6 +144,50 @@ export default class UserSevice {
       status: "success",
       message: "Successfully update user",
       statusCode: 201,
+    };
+  }
+  static async putPassword(
+    data: PasswordPutData,
+    username: string
+  ): Promise<ResponsePayload> {
+    const dataUser = await supabase
+      .from("user")
+      .select("*")
+      .eq("username", username);
+
+    if (dataUser.error) {
+      throw new ResponseError(401, "An error while update password");
+    }
+    if (dataUser.data.length === 0) {
+      throw new ResponseError(402, "Username Not Found");
+    }
+
+    const isPasswordValid = await Bcrypt.comparePassword(
+      data.currentPassword,
+      dataUser.data[0].password
+    );
+
+    if (!isPasswordValid) {
+      throw new ResponseError(403, "Masukkan password sebelumnya dengan benar");
+    }
+
+    const passwordHashed = await Bcrypt.hashPassword(data.password);
+
+    const updatedPassword = await supabase
+      .from("user")
+      .update({
+        password: passwordHashed,
+      })
+      .eq("id", dataUser.data[0].id);
+
+    if (updatedPassword.error) {
+      throw new ResponseError(401, "An error while update password");
+    }
+
+    return {
+      status: "success",
+      statusCode: 201,
+      message: "Successfully update data user!",
     };
   }
 }

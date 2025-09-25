@@ -38,3 +38,9 @@ export interface DataPutUser {
   title: string;
   descriptionUser: string;
 }
+
+export interface PasswordPutData {
+  currentPassword: string;
+  password: string;
+  confirmPassword: string;
+}

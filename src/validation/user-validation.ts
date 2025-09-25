@@ -43,4 +43,21 @@ export default class UserValidation {
       .min(10, "Description minimal 10 karakter")
       .max(500, "Description maksimal 500 karakter"),
   });
+
+  static readonly PUTPASSWORD = z
+    .object({
+      currentPassword: z
+        .string({ error: "Please fill current password properly!" })
+        .min(6, "Password minimal 6 karakter"),
+      password: z
+        .string({ error: "Please fill password properly!" })
+        .min(6, "Password minimal 6 karakter"),
+      confirmPassword: z
+        .string({ error: "Please fill confirmation password properly!" })
+        .min(6, "Konfirmasi password minimal 6 karakter"),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: "Password dan konfirmasi password harus sama",
+      path: ["confirmPassword"],
+    });
 }
