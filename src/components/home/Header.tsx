@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Dropdown from "../Dropdown";
+import Popover from "../Popover";
+import EditForm from "../EditForm";
 
 interface DataUser {
   title: string;
@@ -103,17 +105,21 @@ export default function Header({ token }: { token: string | undefined }) {
               </span>
             }
           >
-            <Link
-              href={"/edit-user"}
-              className="w-full rounded-md hover:text-slate-900 transition-colors duration-200 text-sm font-medium py-2 hover:bg-slate-300 ps-3"
+            <Popover
+              className="flex item-center text-left"
+              triggerElement={
+                <span className="w-full rounded-md hover:text-slate-900 transition-colors duration-200 text-sm font-medium py-2 hover:bg-slate-300 ps-3">
+                  Edit Profile
+                </span>
+              }
             >
-              Edit Profile
-            </Link>
+              <EditForm />
+            </Popover>
             <Link
               href={"/change-password"}
               className="w-full rounded-md hover:text-slate-900 transition-colors duration-200 text-sm font-medium py-2 hover:bg-slate-300 ps-3"
             >
-             Ganti Password
+              Ganti Password
             </Link>
           </Dropdown>
         ) : null}

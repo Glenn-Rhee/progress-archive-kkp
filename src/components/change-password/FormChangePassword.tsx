@@ -269,7 +269,7 @@ export default function FormChangePassword() {
       <div className="text-center mt-3">
         <button
           type="button"
-          onClick={() => router.push("/")}
+          onClick={() => router.back()}
           className="font-medium cursor-pointer text-orange-400 hover:text-orange-300 transition-colors duration-200"
         >
           Kembali
