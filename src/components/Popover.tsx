@@ -10,7 +10,7 @@ interface PopoverProps {
 
 export default function Popover(props: PopoverProps) {
   const { triggerElement, children } = props;
-  const { openId, setOpenId } = usePopover();
+  const { openId, setOpenId, setAutoFocus } = usePopover();
   const id = useId();
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
@@ -18,7 +18,17 @@ export default function Popover(props: PopoverProps) {
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpenId(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKey);
+
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [setOpenId]);
+
   const handleClickOutside = useCallback(
     (event: MouseEvent) => {
       const popoverEl = popoverRef.current;
@@ -43,6 +53,10 @@ export default function Popover(props: PopoverProps) {
 
   useEffect(() => {
     if (openId === id) {
+      const el = document.querySelector("#title") as HTMLInputElement;
+      const elEdit = document.querySelector("#editTitle") as HTMLInputElement;
+      el?.focus();
+      elEdit?.focus();
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -85,6 +99,7 @@ export default function Popover(props: PopoverProps) {
         type="button"
         onClick={() => {
           setOpenId(id);
+          setAutoFocus(true);
         }}
         ref={triggerRef}
         className="cursor-pointer w-full"
