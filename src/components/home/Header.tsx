@@ -86,7 +86,7 @@ export default function Header({ token }: { token: string | undefined }) {
     }
   }, [isChange, setIsChange]);
   return (
-    <div className="bg-slate-900/50 relative backdrop-blur-xl border border-slate-800/50 rounded-3xl p-8 mb-8 shadow-2xl animate-fade-in">
+    <div className="bg-slate-900/50 relative backdrop-blur-xl border border-slate-800/50 rounded-3xl p-6 mb-6 shadow-2xl animate-fade-in">
       <div className="flex justify-start p-2 w-fit absolute top-4 left-4 rounded-full transition-transform duration-100">
         {token ? (
           <Dropdown
@@ -112,7 +112,7 @@ export default function Header({ token }: { token: string | undefined }) {
                 </span>
               }
             >
-              <EditForm data={dataUser}/>
+              <EditForm data={dataUser} />
             </Popover>
             <Link
               href={"/change-password"}

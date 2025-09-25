@@ -14,7 +14,7 @@ export default async function HomePage() {
         <Header token={token} />
         <SearchBar token={token} />
       </div>
-      <Cards token={token} />
+    <Cards token={token} />
     </div>
   );
 }

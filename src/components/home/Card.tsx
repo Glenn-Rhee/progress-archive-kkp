@@ -176,7 +176,7 @@ export default function Card(props: CardProps) {
       </div>
       <div className="bg-slate-900/50 border border-slate-600/20 rounded-xl p-4 mb-4">
         <div className="flex items-center gap-3">
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 truncate">
             {!data.isPrivate || token ? (
               <Link
                 target="_blank"
