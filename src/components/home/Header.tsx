@@ -4,13 +4,8 @@ import { useDataLink } from "@/store/dataLink-store";
 import { ResponsePayload } from "@/types";
 import clsx from "clsx";
 import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import Dropdown from "../Dropdown";
-import Popover from "../Popover";
-import EditForm from "./EditForm";
 
 interface DataUser {
   title: string;
@@ -19,147 +14,44 @@ interface DataUser {
 }
 
 export default function Header({ token }: { token: string | undefined }) {
-  const router = useRouter();
   const { isChange, setIsChange } = useDataLink();
   const [dataUser, setDataUser] = useState<DataUser | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  async function handleLogout() {
+  async function getUser() {
     setLoading(true);
     try {
-      const response = await fetch("/api/auth", {
-        method: "DELETE",
-      });
+      const response = await fetch("/api/user", { cache: "no-store" });
+      const dataResponse = (await response.json()) as ResponsePayload<DataUser>;
 
-      const dataResponse = (await response.json()) as ResponsePayload;
       if (dataResponse.status === "failed") {
         throw new ResponseError(dataResponse.statusCode, dataResponse.message);
       }
 
-      toast.success(dataResponse.message);
-      setIsChange(true);
-      router.refresh();
+      setDataUser(dataResponse.data!);
     } catch (error) {
+      setDataUser(null);
       if (error instanceof ResponseError) {
         toast.error(error.message);
         return;
       }
-
-      toast.error("An error occured, please try again later");
+      toast.error("An error occured");
     } finally {
       setLoading(false);
     }
   }
 
   useEffect(() => {
-    const getUser = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch("/api/user");
-        const dataResponse =
-          (await response.json()) as ResponsePayload<DataUser>;
-        if (dataResponse.status === "failed") {
-          throw new ResponseError(
-            dataResponse.statusCode,
-            dataResponse.message
-          );
-        }
-
-        setDataUser(dataResponse.data!);
-      } catch (error) {
-        setDataUser(null);
-        if (error instanceof ResponseError) {
-          toast.error(error.message);
-          return;
-        }
-
-        toast.error("An error occured");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     getUser();
+
     if (isChange) {
       setIsChange(false);
       getUser();
     }
-  }, [isChange, setIsChange]);
+  }, [token, isChange, setIsChange]);
+
   return (
     <div className="bg-slate-900/50 relative backdrop-blur-xl border border-slate-800/50 rounded-3xl p-6 mb-6 shadow-2xl animate-fade-in">
-      <div className="flex justify-start p-2 w-fit absolute top-4 left-4 rounded-full transition-transform duration-100">
-        {token ? (
-          <Dropdown
-            className="flex flex-col items-start gap-y-2 px-2"
-            triggerElement={
-              <span
-                className={clsx(
-                  "relative z-10 px-4 py-2 rounded-xl font-semibold text-white",
-                  loading
-                    ? "h-10 w-[90px] rounded-md bg-slate-600/20"
-                    : "h-fit bg-gradient-to-r from-orange-500 to-orange-700"
-                )}
-              >
-                {loading ? "" : dataUser?.username}
-              </span>
-            }
-          >
-            <Popover
-              className="flex item-center text-left"
-              triggerElement={
-                <span className="w-full rounded-md hover:text-slate-900 transition-colors duration-200 text-sm font-medium py-2 hover:bg-slate-300 ps-3">
-                  Edit Profile
-                </span>
-              }
-            >
-              <EditForm data={dataUser} />
-            </Popover>
-            <Link
-              href={"/change-password"}
-              className="w-full rounded-md hover:text-slate-900 transition-colors duration-200 text-sm font-medium py-2 hover:bg-slate-300 ps-3"
-            >
-              Ganti Password
-            </Link>
-          </Dropdown>
-        ) : null}
-      </div>
-      <div className="flex justify-end p-2 w-fit absolute top-4 right-4 rounded-full hover:scale-105 transition-transform duration-100">
-        {token ? (
-          <button
-            onClick={handleLogout}
-            disabled={loading}
-            type="button"
-            className={clsx(
-              "group relative overflow-hidden px-4 py-2 rounded-xl font-semibold text-white",
-              loading
-                ? "cursor-not-allowed bg-slate-500/50"
-                : "cursor-pointer bg-gradient-to-r from-red-500 to-red-700 hover:from-red-500 hover:to-red-400 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-primary-500/25"
-            )}
-          >
-            Logout
-          </button>
-        ) : (
-          <Link
-            href="/auth/login"
-            className="group relative overflow-hidden cursor-pointer 
-             bg-gradient-to-r from-orange-500 to-orange-700 
-             hover:from-orange-500 hover:to-orange-400 
-             px-4 py-2 rounded-xl font-semibold text-white 
-             transition-all duration-300 transform hover:scale-105 
-             hover:shadow-2xl hover:shadow-primary-500/25"
-          >
-            <span
-              className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 
-               transform -skew-x-12 -translate-x-full 
-               group-hover:translate-x-full 
-               transition-transform duration-700 rounded-xl"
-            ></span>
-
-            <span className="relative z-10">Login</span>
-          </Link>
-        )}
-      </div>
-
       <div className="text-center">
         <div className="flex-col relative items-center justify-center mt-1 hover:scale-105 w-fit right-1/2 left-1/2 -translate-x-1/2">
           <Image
