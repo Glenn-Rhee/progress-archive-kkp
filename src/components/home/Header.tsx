@@ -155,7 +155,7 @@ export default function Header({ token }: { token: string | undefined }) {
                transition-transform duration-700 rounded-xl"
             ></span>
 
-            <span className="relative z-10">LOGIN</span>
+            <span className="relative z-10">Login</span>
           </Link>
         )}
       </div>
